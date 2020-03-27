@@ -2,8 +2,9 @@
 
 import socket
 
+#Adresse et port de mon Rpi3
 host = ""
-port = 3334
+port = 3333
 
 ######################################
 
@@ -11,20 +12,20 @@ def send_msg (msg):
     """
     Envoie un message au serveur
     """
-    data = msg.encode("utf-8")  #Encodage du message en binaire
-    socket.sendall(data)        #Transmission du message
+    data = msg.encode("utf-8")
+    socket.sendall(data)
 
 def recv_msg ():
     """
     Permet de recevoir message du serveur et le retourne en sortie
     """
-    data = socket.recv(255)     #Reception du message
-    msg = data.decode("utf-8")  #Decodage du message
+    data = socket.recv(255)
+    msg = data.decode("utf-8") 
     return msg
 
 ##########################################################
 
-socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Type de socket utilisé
+socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 try :
     socket.connect((host,port)) #On se connecte au serveur
@@ -59,7 +60,13 @@ try :
             status = recv_msg()     #On reçois le status
         if (status == "OK"):
             send_msg("OK")
-        
+        #############TEST
+        if (status == "WRITE2"):
+            msg = input('-> ')       #L'utilisateur rentre un message
+            send_msg("OK")           #On envoie que son message a bien etait composé
+        if (status == "SEND"):
+            send_msg(msg)            #On envoie msg
+
         status = recv_msg()
 
 finally:       
