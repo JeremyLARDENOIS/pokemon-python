@@ -102,17 +102,32 @@ def game(conn1,conn2):
     soin=5      #Soin de base
     coutca=5    #Cout de la contre attaque
 
+    broadcast("=========================================================================")
+
     msg = "\nBienvenue sur la plateforme de Combat po.py \n\
 Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0 \n\
-Pour cela, vous disposez de 3 possibilités: \n\
+Pour cela, vous disposez de 3 possibilités: \n"
+    broadcast(msg)
+    msg = "- Une attaque à "+str(atq)+" pv \n\
+- Un soin à 5 pv \n\
+- Une contre-attaque, annule les dégats de l'adversaires et les retournes contre lui \n\
+sous reserve de perdre 5 pv si le contre-attaquant ne se fait pas attaqué \n\
+\nQUE LE COMBAT COMMENCE !\n"
+
+    '''
+    msg = "\nBienvenue sur la plateforme de Combat po.py \n\
+Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0 \n\
+Pour cela, vous disposez de 3 possibilités: \n"
+    broadcast(msg)
+
 - Une attaque à "+str(atq)+" pv \n\
 - Un soin à 5 pv \n\
 - Une contre-attaque, qui coute 5 pv, annule les dégats de l'adversaires et les retournes contre lui \n\
-\nQUE LE COMBAT COMMENCE !\n"
-
+\n\nQUE LE COMBAT COMMENCE !\n"
+    '''
     broadcast(msg)
 
-    broadcast("Mais avant tout, quel est votre nom ?")
+    broadcast("\nMais avant tout, quel est votre nom ?")
     
     name1,name2 = recv2() 
 
@@ -129,6 +144,7 @@ Pour cela, vous disposez de 3 possibilités: \n\
     soin2=soin
 
     while ((pv1 > 0)and(pv2 > 0)):
+        broadcast("=========================================================================")
         broadcast("\n"+name1+" = "+str(pv1)+" pv & "+name2+" = "+str(pv2)+" pv" )
 
         #"""
@@ -140,82 +156,59 @@ Pour cela, vous disposez de 3 possibilités: \n\
         broadcast("3 : Contre-attaque")
 
         choix1, choix2 = recv2() #Réception des choix
-        """
-        #Systeme de tour a tour séparé
-
-
-        #TOUR DU JOUEUR 1
-        broadcast("C'est au tour du joueur 1\n")
-        send(conn2,"En attente du joueur 1...\n")
-        
-        send(conn1,"Que voulez-vous faire ?")
-        send(conn1,"1 : Attaque")
-        send(conn1,"2 : Soin")
-        send(conn1,"3 : Contre-attaque")
-        choix1 = recv(conn1) #Réception du choix du joueur 1
-
-        #TOUR DU JOUEUR 2
-        broadcast("C'est au tour du joueur 2 :")
-        send(conn1,"En attente du joueur 2...")
-    
-        send(conn2,"Que voulez-vous faire ?")
-        send(conn2,"1 : Attaque")
-        send(conn2,"2 : Soin")
-        send(conn2,"3 : Contre-attaque")
-        choix2 = recv(conn2) #Réception du choix du joueur 2
-        """
         #MISE EN CONFRONTATION DES CHOIX
         #Les soins sont executées avant les attaques
         if (choix1 == "2"): #Soin du J1
-            broadcast("Joueur 1 se soigne !")
+            broadcast(name1+" se soigne !")
             gain = min(pv,pv1+soin1) - pv1 #On ne souhaite pas dépasser la limite de pv de base
             pv1 += gain
-            broadcast("Joueur 1 a gagné "+str(gain)+" pv.\n")
+            broadcast(name1+" a gagné "+str(gain)+" pv.\n")
         if (choix2 == "2"): #Soin du J2
-            broadcast("Joueur 2 se soigne !")
+            broadcast(name2 + " se soigne !")
             gain = min(pv,pv2+soin2) - pv2 #On ne souhaite pas dépasser la limite de pv de base
             pv2 += gain
-            broadcast("Joueur 2 a gagné "+str(gain)+" pv.\n")
+            broadcast(name2+" a gagné "+str(gain)+" pv.\n")
         if (choix1 == "1"): #Atq du J1
-            broadcast("Joueur 1 attaque !")
+            broadcast(name1 +" attaque !")
             if (choix2 == "3"): #Catq du J2
-                broadcast("Mais Joueur 2 contre-attaque !")
+                broadcast("Mais "+name2+" contre-attaque !")
                 pv1 -= catq2
-                pv2 -= coutca2
-                broadcast("Joueur 1 a perdu "+str(catq2)+" pv.\n")
-                broadcast("Joueur 2 a perdu "+str(coutca2)+" pv.\n")
+                #pv2 -= coutca2
+                broadcast(name1+" a perdu "+str(catq2)+" pv.\n")
+                #broadcast(name2+" a perdu "+str(coutca2)+" pv.\n")
             else:
                 pv2 -= atq1
-                broadcast("Joueur 2 a perdu "+str(atq1)+" pv.\n")
+                broadcast(name2+" a perdu "+str(atq1)+" pv.\n")
         if (choix2 == "1"): #Atq du J2
-            broadcast("Joueur 2 attaque !")
+            broadcast(name2+" attaque !")
             if (choix1 == "3"): #Catq du J1
-                broadcast("Mais Joueur 1 contre-attaque et perds "+str(coutca1)+" pv!")
+                broadcast("Mais "+name1+" contre-attaque !")
+                #broadcast("Mais Joueur 1 contre-attaque et perds "+str(coutca1)+" pv!")
                 pv2 -= catq1
-                pv1 -= coutca1
-                broadcast("Joueur 2 a perdu "+str(catq1)+" pv.\n")
-                broadcast("Joueur 1 a perdu "+str(coutca1)+" pv.\n")
+                #pv1 -= coutca1
+                broadcast(name2+" a perdu "+str(catq1)+" pv.\n")
+                #broadcast(name1+" a perdu "+str(coutca1)+" pv.\n")
             else:
                 pv1 -= atq2
-                broadcast("Joueur 1 a perdu "+str(atq2)+" pv.\n")
+                broadcast(name1+" a perdu "+str(atq2)+" pv.\n")
         if ((choix1 == "3")and(choix2 != "1")):
-                broadcast("Joueur 1 contre-attaque !")
+                broadcast(name1 +" contre-attaque !")
                 broadcast("Mais c'est inefficace.\n")
                 pv1 -= coutca1
-                broadcast("Joueur 1 a perdu "+str(coutca1)+" pv.\n")
+                broadcast(name1+" a perdu "+str(coutca1)+" pv.\n")
         if ((choix2 == "3")and(choix1 != "1")):
-                broadcast("Joueur 2 contre-attaque !")
+                broadcast(name2+" contre-attaque !")
                 broadcast("Mais c'est inefficace\n")
                 pv2 -= coutca2
-                broadcast("Joueur 2 a perdu "+str(coutca2)+" pv.\n")
+                broadcast(name2+" a perdu "+str(coutca2)+" pv.\n")
 
     if ((pv1 <= 0)and(pv2 <= 0)):
         broadcast("Les deux joueurs n'ont plus de pv, c'est une égalité !")
     else:
         if (pv2 <= 0):
-            broadcast("Le joueur 1 a gagné !")
+            broadcast(name1+" a gagné !")
         if (pv1 <= 0):
-            broadcast("Le joueur 2 a gagné !")
+            broadcast(name2+" a gagné !")
 
 
 ##################################MAIN#############################################
