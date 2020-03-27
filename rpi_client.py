@@ -67,21 +67,7 @@ try :
         if (status == "SEND"):
             send_msg(msg)            #On envoie msg
 
-
         status = recv_msg()
-
-    """
-    while ((status != "")and(status != "STOP")):
-        if (status == "READ"):
-            send_msg
-            recv_msg()
-        if (status == "WRITE"):
-            msg = input()
-            send_msg(msg)
-        status = recv_msg()
-        print(status)
-    """
-
 
 finally:       
     socket.close()
