@@ -2,8 +2,9 @@
 
 import socket
 
+#Adresse et port de mon Rpi3
 host = "78.196.184.92"
-port = 3334
+port = 3333
 
 ######################################
 
@@ -59,7 +60,14 @@ try :
             status = recv_msg()     #On reçois le status
         if (status == "OK"):
             send_msg("OK")
-        
+        #############TEST
+        if (status == "WRITE2"):
+            msg = input('-> ')       #L'utilisateur rentre un message
+            send_msg("OK")           #On envoie que son message a bien etait composé
+        if (status == "SEND"):
+            send_msg(msg)            #On envoie msg
+
+
         status = recv_msg()
 
     """
@@ -77,15 +85,3 @@ try :
 
 finally:       
     socket.close()
-
-
-
-"""
-Exemple d'erreur:
-On obtient cela pour le premier status:
-> READC'est au tour du joueur 1 :READQue voulez-vous faire ?READ1 : AttaqueWRITE
-Et on voudrait obtenir:
-> READ
-Car la suite est censé etre dans les variables suivantes..
-"""
-

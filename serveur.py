@@ -2,10 +2,11 @@
 #coding:utf-8
 
 host = ""
-port = 3334
+port = 3333
 
 import socket, threading, time
-""" PAS BESOIN
+"""
+PAS BESOIN
 class ThreadServer(threading.Thread):
     def __init__(self, conn, id_player):
         threading.Thread.__init__(self)
@@ -94,24 +95,24 @@ def game(conn1,conn2):
         TEST : Permet de recevoir la réponse des deux utilisateurs simultanément
         renvoie la réponse sous forme de tuple
         """
-        send_msg(conn1,"WRITE")   #On envoie WRITE au joueur 1
-        send_msg(conn2,"WRITE")   #On envoie WRITE au joueur 2
+        send_msg(conn1,"WRITE2")   #On envoie WRITE2 au joueur 1
+        send_msg(conn2,"WRITE2")   #On envoie WRITE2 au joueur 2
         
+        status1 = recv_msg(conn1)     #On reçoit le status du joueur 1
+        status2 = recv_msg(conn2)     #On reçoit le status du joueur 2
 
-        msg1 = recv_msg(conn1)     #On reçoit le message
-        msg2 = recv_msg(conn2)     #On reçoit le message
+        if ((status1 == "OK")and(status2 == "OK")):
+            send_msg(conn1,"SEND")   #On envoie SEND au joueur 1
+            msg1 = recv_msg(conn1)
+            send_msg(conn2,"SEND")   #On envoie SEND au joueur 2
+            msg2 = recv_msg(conn2)
+            send_msg(conn1,"OK")
+            recv_msg(conn1)
+            send_msg(conn2,"OK")
+            recv_msg(conn2)
+        else:
+            return recv2()
 
-        if (msg1 == ""): #Si on a rien reçu on recommence
-            msg1 = recv(conn1)
-        else: #Si on a reçu le message, on envoie OK
-            send_msg(conn1,"OK") 
-            recv_msg(conn1) #Le client nous renvoie OK
-
-        if (msg2 == ""): #Si on a rien reçu on recommence
-            msg2 = recv(conn2)
-        else: #Si on a reçu le message, on envoie OK
-            send_msg(conn2,"OK") 
-            recv_msg(conn2) #Le client nous renvoie OK
 
         return (msg1,msg2)
 
@@ -122,14 +123,19 @@ def game(conn1,conn2):
     atq=10      #Attaque de base
     catq=atq    #Contre attaque       
     soin=5      #Soin de base
+    coutca=5    #Cout de la contre attaque
 
-    broadcast("\nBienvenue sur la plateforme de Combat po.py")
-    broadcast("Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0")
-    broadcast("Pour cela, vous disposez de 3 possibilités:")
-    broadcast("- Une attaque à "+str(atq)+" pv")
-    broadcast("- Un soin à 5 pv")
-    broadcast("- Une contre-attaque, qui annule les dégats de l'adversaires et les retournes contre lui")
-    broadcast("\nQUE LE COMBAT COMMENCE !")
+    msg = "\nBienvenue sur la plateforme de Combat po.py \n\
+Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0 \n\
+Pour cela, vous disposez de 3 possibilités: \n\
+- Une attaque à "+str(atq)+" pv \n\
+- Un soin à 5 pv \n\
+- Une contre-attaque, qui coute 5 pv, annule les dégats de l'adversaires et les retournes contre lui \n\
+\nQUE LE COMBAT COMMENCE !\n"
+
+    broadcast(msg)
+
+    #broadcast("Mais avant tout, quel est votre nom ?")
     
     #Dans le cadre d'une future amélioration
     pv1=pv
@@ -138,13 +144,15 @@ def game(conn1,conn2):
     atq2=atq
     catq1=catq
     catq2=catq
+    coutca1 = coutca
+    coutca2 = coutca
     soin1=soin
     soin2=soin
 
     while ((pv1 > 0)and(pv2 > 0)):
         broadcast("\nJoueur 1 = "+str(pv1)+" pv & Joueur 2 = "+str(pv2)+" pv" )
 
-
+        #"""
         #TOUR DES DEUX JOUEURS
         broadcast("C'est au tour du joueur 1\n")
         broadcast("Que voulez-vous faire ?")
@@ -153,7 +161,10 @@ def game(conn1,conn2):
         broadcast("3 : Contre-attaque")
 
         choix1, choix2 = recv2() #Réception des choix
-        """ Systeme de tour a tour séparé
+        """
+        #Systeme de tour a tour séparé
+
+
         #TOUR DU JOUEUR 1
         broadcast("C'est au tour du joueur 1\n")
         send(conn2,"En attente du joueur 1...\n")
@@ -191,25 +202,33 @@ def game(conn1,conn2):
             if (choix2 == "3"): #Catq du J2
                 broadcast("Mais Joueur 2 contre-attaque !")
                 pv1 -= catq2
+                pv2 -= coutca2
                 broadcast("Joueur 1 a perdu "+str(catq2)+" pv.\n")
+                broadcast("Joueur 2 a perdu "+str(coutca2)+" pv.\n")
             else:
                 pv2 -= atq1
                 broadcast("Joueur 2 a perdu "+str(atq1)+" pv.\n")
         if (choix2 == "1"): #Atq du J2
             broadcast("Joueur 2 attaque !")
             if (choix1 == "3"): #Catq du J1
-                broadcast("Mais Joueur 1 contre-attaque !")
+                broadcast("Mais Joueur 1 contre-attaque et perds "+str(coutca1)+" pv!")
                 pv2 -= catq1
+                pv1 -= coutca1
                 broadcast("Joueur 2 a perdu "+str(catq1)+" pv.\n")
+                broadcast("Joueur 1 a perdu "+str(coutca1)+" pv.\n")
             else:
                 pv1 -= atq2
                 broadcast("Joueur 1 a perdu "+str(atq2)+" pv.\n")
         if ((choix1 == "3")and(choix2 != "1")):
                 broadcast("Joueur 1 contre-attaque !")
                 broadcast("Mais c'est inefficace.\n")
+                pv1 -= coutca1
+                broadcast("Joueur 1 a perdu "+str(coutca1)+" pv.\n")
         if ((choix2 == "3")and(choix1 != "1")):
                 broadcast("Joueur 2 contre-attaque !")
                 broadcast("Mais c'est inefficace\n")
+                pv2 -= coutca2
+                broadcast("Joueur 2 a perdu "+str(coutca2)+" pv.\n")
 
     if ((pv1 <= 0)and(pv2 <= 0)):
         broadcast("Les deux joueurs n'ont plus de pv, c'est une égalité !")
