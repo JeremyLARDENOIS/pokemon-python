@@ -90,43 +90,97 @@ def game(conn1,conn2):
         send(conn2,msg)
 
     #############DEBUT DU JEU##########################
-    pv1=30
-    pv2=30
-    atq1=10
-    atq2=10
-    tour=1
+    pv=30       #PV de base
+    atq=10      #Attaque de base
+    catq=atq    #Contre attaque       
+    soin=5      #Soin de base
+    tour=1      #Premier joueur à jouer
+
+    broadcast("\nBienvenue sur la plateforme de Combat po.py")
+    broadcast("Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0")
+    broadcast("Pour cela, vous disposez de 3 possibilités:")
+    broadcast("- Une attaque à "+str(atq)+" pv")
+    broadcast("- Un soin à 5 pv")
+    broadcast("- Une contre-attaque, qui annule les dégats de l'adversaires et les retournes contre lui")
+    broadcast("\nQUE LE COMBAT COMMENCE !")
+    
+    #Dans le cadre d'une future amélioration
+    pv1=pv
+    pv2=pv
+    atq1=atq
+    atq2=atq
+    catq1=catq
+    catq2=catq
+    soin1=soin
+    soin2=soin
 
     while ((pv1 > 0)and(pv2 > 0)):
         broadcast("\nJoueur 1 = "+str(pv1)+" pv & Joueur 2 = "+str(pv2)+" pv" )
+
+        #TOUR DU JOUEUR 1
         broadcast("C'est au tour du joueur 1\n")
         send(conn2,"En attente du joueur 1...\n")
         
         send(conn1,"Que voulez-vous faire ?")
         send(conn1,"1 : Attaque")
-        choix = recv(conn1)
+        send(conn1,"2 : Soin")
+        send(conn1,"3 : Contre-attaque")
+        choix1 = recv(conn1) #Réception du choix du joueur 1
 
-        if(choix == "1"):
+        #TOUR DU JOUEUR 2
+        broadcast("C'est au tour du joueur 2 :")
+        send(conn1,"En attente du joueur 2...")
+    
+        send(conn2,"Que voulez-vous faire ?")
+        send(conn2,"1 : Attaque")
+        send(conn2,"2 : Soin")
+        send(conn2,"3 : Contre-attaque")
+        choix2 = recv(conn2) #Réception du choix du joueur 2
+
+        #MISE EN CONFRONTATION DES CHOIX
+        #Les soins sont executées avant les attaques
+        if (choix1 == "2"): #Soin du J1
+            broadcast("Joueur 1 se soigne !")
+            gain = min(pv,pv1+soin1) - pv1 #On ne souhaite pas dépasser la limite de pv de base
+            pv1 += gain
+            broadcast("Joueur 1 a gagné "+str(gain)+" pv.\n")
+        if (choix2 == "2"): #Soin du J2
+            broadcast("Joueur 2 se soigne !")
+            gain = min(pv,pv2+soin2) - pv2 #On ne souhaite pas dépasser la limite de pv de base
+            pv2 += gain
+            broadcast("Joueur 2 a gagné "+str(gain)+" pv.\n")
+        if (choix1 == "1"): #Atq du J1
             broadcast("Joueur 1 attaque !")
-            pv2 -= atq1
-            broadcast("Joueur 2 a perdu "+str(atq1)+" pv")
-
-        if (pv2 > 0):
-            broadcast("\nJoueur 1 = "+str(pv1)+" pv & Joueur 2 = "+str(pv2)+" pv" )
-            broadcast("C'est au tour du joueur 2 :")
-            send(conn1,"En attente du joueur 2...")
-        
-            send(conn2,"Que voulez-vous faire ?")
-            send(conn2,"1 : Attaque")
-            choix = recv(conn2)
-
-            if(choix == "1"):
-                broadcast("Joueur 2 attaque !")
+            if (choix2 == "3"): #Catq du J2
+                broadcast("Mais Joueur 2 contre-attaque !")
+                pv1 -= catq2
+                broadcast("Joueur 1 a perdu "+str(catq2)+" pv.\n")
+            else:
+                pv2 -= atq1
+                broadcast("Joueur 2 a perdu "+str(atq1)+" pv.\n")
+        if (choix2 == "1"): #Atq du J2
+            broadcast("Joueur 2 attaque !")
+            if (choix1 == "3"): #Catq du J1
+                broadcast("Mais Joueur 1 contre-attaque !")
+                pv2 -= catq1
+                broadcast("Joueur 2 a perdu "+str(catq1)+" pv.\n")
+            else:
                 pv1 -= atq2
-                broadcast("Joueur 1 a perdu "+str(atq2)+" pv")
-    if (pv2 <= 0):
-        broadcast("Le joueur 1 a gagné")
-    if (pv1 <= 0):
-        broadcast("Le joueur 2 a gagné")
+                broadcast("Joueur 1 a perdu "+str(atq2)+" pv.\n")
+        if ((choix1 == "3")and(choix2 != "1")):
+                broadcast("Joueur 1 contre-attaque !")
+                broadcast("Mais c'est inefficace.\n")
+        if ((choix2 == "3")and(choix1 != "1")):
+                broadcast("Joueur 2 contre-attaque !")
+                broadcast("Mais c'est inefficace\n")
+
+    if ((pv1 <= 0)and(pv2 <= 0)):
+        broadcast("Les deux joueurs n'ont plus de pv, c'est une égalité !")
+    else:
+        if (pv2 <= 0):
+            broadcast("Le joueur 1 a gagné !")
+        if (pv1 <= 0):
+            broadcast("Le joueur 2 a gagné !")
 
 
 ############MAIN
@@ -138,57 +192,60 @@ print("Lancement du serveur")
 
 socket.listen(3) #Nombre de tentatives autorisées
 
-id_player = 1
+while True:
+    id_player = 1
 
-#Connexion des clients
-conn1, addr1 = socket.accept() #On attends que le client se connecte
-print("Connexion", id_player, "accepté")
-"""PAS BESOIN
-    my_thread = ThreadServer(conn,id_player)
-    my_thread.start()
-    #id_player += 1
-"""
-send_msg(conn1,id_player)
-msg = recv_msg(conn1)
-if (msg == "OK"):
-    print (id_player,"joueur(s) connecté(s)")
-    print(addr1)
-    id_player += 1
-else:
-    print("echec de la connection")
-    exit(1) #Arrete le serveur
-#deuxieme client
-conn2, addr2 = socket.accept()
-print("Connexion", id_player, "accepté")
-""" PAS BESOIN
-    my_thread = ThreadServer(conn,id_player)
-    my_thread.start()
-    #id_player += 1
-"""
-send_msg(conn2,id_player)
-msg = recv_msg(conn2)
-if (msg == "OK"):
-    print (id_player,"joueur(s) connecté(s)")
-    print(addr2)
-    id_player += 1 #Permet de sortir de la boucle
-else:
-    print("echec de la connection")
-    exit(1) #Arrete le serveur
+    #Connexion des clients
+    conn1, addr1 = socket.accept() #On attends que le client se connecte
+    print("Connexion", id_player, "accepté")
+    """PAS BESOIN
+        my_thread = ThreadServer(conn,id_player)
+        my_thread.start()
+        #id_player += 1
+    """
+    send_msg(conn1,id_player)
+    msg = recv_msg(conn1)
+    if (msg == "OK"):
+        print (id_player,"joueur(s) connecté(s)")
+        print(addr1)
+        id_player += 1
+    else:
+        print("echec de la connection")
+        exit(1) #Arrete le serveur
+    #deuxieme client
+    conn2, addr2 = socket.accept()
+    print("Connexion", id_player, "accepté")
+    """ PAS BESOIN
+        my_thread = ThreadServer(conn,id_player)
+        my_thread.start()
+        #id_player += 1
+    """
+    send_msg(conn2,id_player)
+    msg = recv_msg(conn2)
+    if (msg == "OK"):
+        print (id_player,"joueur(s) connecté(s)")
+        print(addr2)
+        id_player += 1 #Permet de sortir de la boucle
+    else:
+        print("echec de la connection")
+        exit(1) #Arrete le serveur
 
-send_msg(conn1,"READY")
-send_msg(conn2,"READY")
+    send_msg(conn1,"READY")
+    send_msg(conn2,"READY")
 
-msg1 = recv_msg(conn1)
-msg2 = recv_msg(conn2)
-if ((msg1 == "READY")and(msg2 == "READY")):
-    print("CONNECTION SUCCESSFULL")
+    msg1 = recv_msg(conn1)
+    msg2 = recv_msg(conn2)
+    if ((msg1 == "READY")and(msg2 == "READY")):
+        print("CONNECTION SUCCESSFULL")
 
-game(conn1,conn2) #Lancement du jeu
+    game(conn1,conn2) #Lancement du jeu
 
-#Déconnexion
-send_msg(conn1,"STOP") 
-send_msg(conn2,"STOP")
-conn1.close() 
-conn2.close() 
+    #Déconnexion
+    send_msg(conn1,"STOP") 
+    send_msg(conn2,"STOP")
+    conn1.close() 
+    conn2.close() 
+
 socket.close()
+
 

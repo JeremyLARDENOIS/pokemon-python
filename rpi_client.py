@@ -2,7 +2,7 @@
 
 import socket
 
-host = ""
+host = "78.196.184.92"
 port = 3334
 
 ######################################
@@ -11,20 +11,20 @@ def send_msg (msg):
     """
     Envoie un message au serveur
     """
-    data = msg.encode("utf-8")  #Encodage du message en binaire
-    socket.sendall(data)        #Transmission du message
+    data = msg.encode("utf-8")
+    socket.sendall(data)
 
 def recv_msg ():
     """
     Permet de recevoir message du serveur et le retourne en sortie
     """
-    data = socket.recv(255)     #Reception du message
-    msg = data.decode("utf-8")  #Decodage du message
+    data = socket.recv(255)
+    msg = data.decode("utf-8") 
     return msg
 
 ##########################################################
 
-socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Type de socket utilisé
+socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 try :
     socket.connect((host,port)) #On se connecte au serveur
@@ -62,5 +62,30 @@ try :
         
         status = recv_msg()
 
+    """
+    while ((status != "")and(status != "STOP")):
+        if (status == "READ"):
+            send_msg
+            recv_msg()
+        if (status == "WRITE"):
+            msg = input()
+            send_msg(msg)
+        status = recv_msg()
+        print(status)
+    """
+
+
 finally:       
     socket.close()
+
+
+
+"""
+Exemple d'erreur:
+On obtient cela pour le premier status:
+> READC'est au tour du joueur 1 :READQue voulez-vous faire ?READ1 : AttaqueWRITE
+Et on voudrait obtenir:
+> READ
+Car la suite est censé etre dans les variables suivantes..
+"""
+
