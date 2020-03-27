@@ -96,22 +96,24 @@ def game(conn1,conn2):
     """
     Debut du jeu
     """
-    pv=30       #PV de base
-    atq=10      #Attaque de base
-    catq=atq    #Contre attaque       
+    pv=50       #PV de base
+    atq=15      #Attaque de base
     soin=5      #Soin de base
+    catq=10    #Contre attaque       
     coutca=5    #Cout de la contre attaque
 
     broadcast("=========================================================================")
 
     msg = "\nBienvenue sur la plateforme de Combat po.py \n\
 Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0 \n\
+Vous commencez avec "+ str(pv)+" pv. \n\
 Pour cela, vous disposez de 3 possibilités: \n"
     broadcast(msg)
-    msg = "- Une attaque à "+str(atq)+" pv \n\
-- Un soin à 5 pv \n\
-- Une contre-attaque, annule les dégats de l'adversaires et les retournes contre lui \n\
-sous reserve de perdre 5 pv si le contre-attaquant ne se fait pas attaqué \n\
+    msg = "- Une attaque qui inflige "+str(atq)+" pv \n\
+- Un soin qui restore "+str(soin)+" pv \n\
+- Une contre-attaque, annule les dégats de l'adversaires et retourne "+ str(catq)+"\
+ contre lui sous reserve de perdre "+str(catq)+" \
+ pv si le contre-attaquant ne se fait pas attaqué \n\
 \nQUE LE COMBAT COMMENCE !\n"
 
     '''
