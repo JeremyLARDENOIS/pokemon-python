@@ -144,10 +144,14 @@ Pour cela, vous disposez de 3 possibilités: \n"
     coutca2 = coutca
     soin1=soin
     soin2=soin
+    nb_tours = 0
 
     while ((pv1 > 0)and(pv2 > 0)):
         broadcast("=========================================================================")
+        broadcast("tour n°"+str(nb_tours)+" :")
         broadcast("\n"+name1+" = "+str(pv1)+" pv & "+name2+" = "+str(pv2)+" pv" )
+        
+        nb_tours +=1
 
         #"""
         #TOUR DES DEUX JOUEURS
