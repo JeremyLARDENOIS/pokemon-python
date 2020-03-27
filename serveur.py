@@ -89,12 +89,39 @@ def game(conn1,conn2):
         send(conn1,msg)
         send(conn2,msg)
 
+    def recv2():
+        """
+        TEST : Permet de recevoir la réponse des deux utilisateurs simultanément
+        renvoie la réponse sous forme de tuple
+        """
+        send_msg(conn1,"WRITE")   #On envoie WRITE au joueur 1
+        send_msg(conn2,"WRITE")   #On envoie WRITE au joueur 2
+        
+
+        msg1 = recv_msg(conn1)     #On reçoit le message
+        msg2 = recv_msg(conn2)     #On reçoit le message
+
+        if (msg1 == ""): #Si on a rien reçu on recommence
+            msg1 = recv(conn1)
+        else: #Si on a reçu le message, on envoie OK
+            send_msg(conn1,"OK") 
+            recv_msg(conn1) #Le client nous renvoie OK
+
+        if (msg2 == ""): #Si on a rien reçu on recommence
+            msg2 = recv(conn2)
+        else: #Si on a reçu le message, on envoie OK
+            send_msg(conn2,"OK") 
+            recv_msg(conn2) #Le client nous renvoie OK
+
+        return (msg1,msg2)
+
+
+
     #############DEBUT DU JEU##########################
     pv=30       #PV de base
     atq=10      #Attaque de base
     catq=atq    #Contre attaque       
     soin=5      #Soin de base
-    tour=1      #Premier joueur à jouer
 
     broadcast("\nBienvenue sur la plateforme de Combat po.py")
     broadcast("Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0")
@@ -117,6 +144,16 @@ def game(conn1,conn2):
     while ((pv1 > 0)and(pv2 > 0)):
         broadcast("\nJoueur 1 = "+str(pv1)+" pv & Joueur 2 = "+str(pv2)+" pv" )
 
+
+        #TOUR DES DEUX JOUEURS
+        broadcast("C'est au tour du joueur 1\n")
+        broadcast("Que voulez-vous faire ?")
+        broadcast("1 : Attaque")
+        broadcast("2 : Soin")
+        broadcast("3 : Contre-attaque")
+
+        choix1, choix2 = recv2() #Réception des choix
+        """ Systeme de tour a tour séparé
         #TOUR DU JOUEUR 1
         broadcast("C'est au tour du joueur 1\n")
         send(conn2,"En attente du joueur 1...\n")
@@ -136,7 +173,7 @@ def game(conn1,conn2):
         send(conn2,"2 : Soin")
         send(conn2,"3 : Contre-attaque")
         choix2 = recv(conn2) #Réception du choix du joueur 2
-
+        """
         #MISE EN CONFRONTATION DES CHOIX
         #Les soins sont executées avant les attaques
         if (choix1 == "2"): #Soin du J1
