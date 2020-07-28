@@ -9,53 +9,49 @@ def main():
     """
     Debut du jeu
     """
-    pv=50       #PV de base
-    atq=15      #Attaque de base
-    soin=5      #Soin de base
-    catq=10    #Contre attaque       
-    coutca=5    #Cout de la contre attaque
+
+    class Joueur:
+      """
+      Classe définissant les caracteristiques d'un joueur :
+      """
+      def __init__(self, name = ""):
+        """Constructeur de notre classe"""
+        self.name = name
+        self.pv=50       #PV de base
+        self.atq=15      #Attaque de base
+        self.soin=5      #Soin de base
+        self.catq=10     #Contre attaque       
+        self.coutca=5    #Cout de la contre attaque
 
     print("=========================================================================")
 
     print("\nBienvenue sur la plateforme de Combat po.py \n\
 Le but du jeu est de faire descendre les points de vie (pv) de l'adversaire à 0 \n\
-Vous commencez avec "+ str(pv)+" pv. \n\
+Vous commencez avec "+ str(Joueur().pv)+" pv. \n\
 Pour cela, vous disposez de 3 possibilités: \n")
 
-    print("- Une attaque qui inflige "+str(atq)+" pv \n\
-- Un soin qui restore "+str(soin)+" pv \n\
-- Une contre-attaque, annule les dégats de l'adversaires et retourne "+ str(catq)+"\
- contre lui sous reserve de perdre "+str(catq)+" \
+    print("- Une attaque qui inflige "+str(Joueur().atq)+" pv \n\
+- Un soin qui restore "+str(Joueur().soin)+" pv \n\
+- Une contre-attaque, annule les dégats de l'adversaires et retourne "+ str(Joueur().catq)+"\
+ contre lui sous reserve de perdre "+str(Joueur().catq)+" \
  pv si le contre-attaquant ne se fait pas attaqué \n\
 \nQUE LE COMBAT COMMENCE !\n")
 
     #print("\nMais avant tout, quel est votre nom ?")
     
-    #name1,name2 = recv2()
-    name1 = input("\nMais avant tout, quel est votre nom ?\n-> ")
-    
-    name2 = "Le méchant"
-
+    #j1.name,j2.name = recv2()
 
     #Dans le cadre d'une future amélioration
-    pv1=pv
-    pv2=pv
-    atq1=atq
-    atq2=atq
-    catq1=catq
-    catq2=catq
-    coutca1 = coutca
-    coutca2 = coutca
-    soin1=soin
-    soin2=soin
+    j1 = Joueur(input("\nMais avant tout, quel est votre nom ?\n-> "))
+    j2 = Joueur("Le méchant")
     nb_tours = 0
 
-    while ((pv1 > 0)and(pv2 > 0)):
+    while ((j1.pv > 0)and(j2.pv > 0)):
         nb_tours +=1
         
         print("=========================================================================")
         print("tour n°"+str(nb_tours)+" :")
-        print("\n"+name1+" = "+str(pv1)+" pv & "+name2+" = "+str(pv2)+" pv" )
+        print("\n"+j1.name+" = "+str(j1.pv)+" pv & "+j2.name+" = "+str(j2.pv)+" pv" )
         
                 #"""
         #TOUR DES DEUX JOUEURS
@@ -74,55 +70,55 @@ Pour cela, vous disposez de 3 possibilités: \n")
         #MISE EN CONFRONTATION DES CHOIX
         #Les soins sont executées avant les attaques
         if (choix1 == "2"): #Soin du J1
-            print(name1+" se soigne !")
-            gain = min(pv,pv1+soin1) - pv1 #On ne souhaite pas dépasser la limite de pv de base
-            pv1 += gain
-            print(name1+" a gagné "+str(gain)+" pv.\n")
+            print(j1.name+" se soigne !")
+            gain = min(Joueur().pv,j1.pv+j1.soin) - j1.pv #On ne souhaite pas dépasser la limite de pv de base
+            j1.pv += gain
+            print(j1.name+" a gagné "+str(gain)+" pv.\n")
         if (choix2 == "2"): #Soin du J2
-            print(name2 + " se soigne !")
-            gain = min(pv,pv2+soin2) - pv2 #On ne souhaite pas dépasser la limite de pv de base
-            pv2 += gain
-            print(name2+" a gagné "+str(gain)+" pv.\n")
+            print(j2.name + " se soigne !")
+            gain = min(Joueur().pv,j2.pv+j2.soin) - j2.pv #On ne souhaite pas dépasser la limite de pv de base
+            j2.pv += gain
+            print(j2.name+" a gagné "+str(gain)+" pv.\n")
         if (choix1 == "1"): #Atq du J1
-            print(name1 +" attaque !")
+            print(j1.name +" attaque !")
             if (choix2 == "3"): #Catq du J2
-                print("Mais "+name2+" contre-attaque !")
-                pv1 -= catq2
-                #pv2 -= coutca2
-                print(name1+" a perdu "+str(catq2)+" pv.\n")
-                #print(name2+" a perdu "+str(coutca2)+" pv.\n")
+                print("Mais "+j2.name+" contre-attaque !")
+                j1.pv -= j2.catq
+                #j2.pv -= j2.coutca
+                print(j1.name+" a perdu "+str(j2.atq)+" pv.\n")
+                #print(j2.name+" a perdu "+str(j2.coutca)+" pv.\n")
             else:
-                pv2 -= atq1
-                print(name2+" a perdu "+str(atq1)+" pv.\n")
+                j2.pv -= j1.atq
+                print(j2.name+" a perdu "+str(j1.atq)+" pv.\n")
         if (choix2 == "1"): #Atq du J2
-            print(name2+" attaque !")
+            print(j2.name+" attaque !")
             if (choix1 == "3"): #Catq du J1
-                print("Mais "+name1+" contre-attaque !")
-                #print("Mais Joueur 1 contre-attaque et perds "+str(coutca1)+" pv!")
-                pv2 -= catq1
-                #pv1 -= coutca1
-                print(name2+" a perdu "+str(catq1)+" pv.\n")
-                #print(name1+" a perdu "+str(coutca1)+" pv.\n")
+                print("Mais "+j1.name+" contre-attaque !")
+                #print("Mais Joueur 1 contre-attaque et perds "+str(j1.coutca)+" pv!")
+                j2.pv -= j1.catq
+                #j1.pv -= j1.coutca
+                print(j2.name+" a perdu "+str(j1.catq)+" pv.\n")
+                #print(j1.name+" a perdu "+str(j1.coutca)+" pv.\n")
             else:
-                pv1 -= atq2
-                print(name1+" a perdu "+str(atq2)+" pv.\n")
+                j1.pv -= j2.atq
+                print(j1.name+" a perdu "+str(j2.atq)+" pv.\n")
         if ((choix1 == "3")and(choix2 != "1")):
-                print(name1 +" contre-attaque !")
+                print(j1.name +" contre-attaque !")
                 print("Mais c'est inefficace.\n")
-                pv1 -= coutca1
-                print(name1+" a perdu "+str(coutca1)+" pv.\n")
+                j1.pv -= j1.coutca
+                print(j1.name+" a perdu "+str(j1.coutca)+" pv.\n")
         if ((choix2 == "3")and(choix1 != "1")):
-                print(name2+" contre-attaque !")
+                print(j2.name+" contre-attaque !")
                 print("Mais c'est inefficace\n")
-                pv2 -= coutca2
-                print(name2+" a perdu "+str(coutca2)+" pv.\n")
+                j2.pv -= j2.coutca
+                print(j2.name+" a perdu "+str(j2.coutca)+" pv.\n")
 
-    if ((pv1 <= 0)and(pv2 <= 0)):
+    if ((j1.pv <= 0)and(j2.pv <= 0)):
         print("Les deux joueurs n'ont plus de pv, c'est une égalité !")
     else:
-        if (pv2 <= 0):
-            print(name1+" a gagné !")
-        if (pv1 <= 0):
-            print(name2+" a gagné !")
+        if (j2.pv <= 0):
+            print(j1.name+" a gagné !")
+        if (j1.pv <= 0):
+            print(j2.name+" a gagné !")
 
 main()
