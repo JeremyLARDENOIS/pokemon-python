@@ -12,6 +12,29 @@ class Interface(Frame):
         self.content = Frame(self.fenetre)
         self.content.pack()
 
+
+        self.menu()
+
+    def mainloop(self):
+        self.fenetre.mainloop()
+
+    def quit(self):
+        self.fenetre.destroy()
+
+    def refresh(self):
+        '''
+        Supprime tout le contenu et recrée une Frame content dans fenetre
+        Toutes les fonctions ci-dessous doivent commencer par l'appel de cette fonction
+        '''
+
+        self.content.destroy()
+        self.content = Frame(self.fenetre)
+        self.content.pack()
+
+    def menu(self):
+        '''Page d'accueil'''
+        self.refresh()
+
         self.txt = Label(self.content, text="Hello World",)
         self.txt.pack()
         
@@ -22,28 +45,34 @@ class Interface(Frame):
         self.buttonq = Button(self.content,text="Quit", command=self.quit)
         self.buttonq.pack()
 
-        self.fenetre.mainloop()
+
+    def notAvailable(self):
+        '''
+        Indique que le contenu n'est pas encore disponible
+        et renvoie sur la page d'accueil
+        '''
+        self.refresh()
+
+        self.txt = Label(self.content, text="Ce contenu n'est pas encore disponible",)
+        self.txt.pack()
+        
+        self.buttonDuel = Button(self.content,text="Page d'accueil", command=self.menu)
+        self.buttonDuel.pack()
+
+
     
-    def quit(self):
-        self.fenetre.destroy()
-
-    def refresh(self):
-        '''Supprime tout le contenu et recrée une Frame content dans fenetre'''
-        self.content.destroy()
-        self.content = Frame(self.fenetre)
-        self.content.pack()
-
     def duel(self):
         self.refresh()
 
-        self.button1p = Button(self.content,text="1 joueur")
+        self.button1p = Button(self.content,text="1 joueur",command=self.notAvailable)
         self.button1p.pack()
 
-        self.button2p = Button(self.content,text="2 joueurs")
+        self.button2p = Button(self.content,text="2 joueurs",command = self.notAvailable)
         self.button2p.pack()
 
 def main ():
     interface = Interface()
+    interface.mainloop()
 
 
 main()
