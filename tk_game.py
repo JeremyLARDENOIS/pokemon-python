@@ -12,10 +12,7 @@ class Interface(Frame):
         self.content = Frame(self.fenetre)
         self.content.pack()
 
-
         self.menu()
-
-    def mainloop(self):
         self.fenetre.mainloop()
 
     def quit(self):
@@ -31,6 +28,21 @@ class Interface(Frame):
         self.content = Frame(self.fenetre)
         self.content.pack()
 
+
+    def notAvailable(self):
+        '''
+        Indique que le contenu n'est pas encore disponible
+        et renvoie sur la page d'accueil
+        '''
+        self.refresh()
+
+        self.txt = Label(self.content, text="Ce contenu X  n'est pas encore disponible")
+        self.txt.pack()
+        
+        self.buttonDuel = Button(self.content,text="Page d'accueil", command=self.menu)
+        self.buttonDuel.pack()
+
+
     def menu(self):
         '''Page d'accueil'''
         self.refresh()
@@ -45,34 +57,40 @@ class Interface(Frame):
         self.buttonq = Button(self.content,text="Quit", command=self.quit)
         self.buttonq.pack()
 
-
-    def notAvailable(self):
-        '''
-        Indique que le contenu n'est pas encore disponible
-        et renvoie sur la page d'accueil
-        '''
-        self.refresh()
-
-        self.txt = Label(self.content, text="Ce contenu n'est pas encore disponible",)
-        self.txt.pack()
-        
-        self.buttonDuel = Button(self.content,text="Page d'accueil", command=self.menu)
-        self.buttonDuel.pack()
-
-
     
     def duel(self):
         self.refresh()
 
-        self.button1p = Button(self.content,text="1 joueur",command=self.notAvailable)
+        self.button1p = Button(self.content,text="1 joueur", command = self.duel1p)
         self.button1p.pack()
 
         self.button2p = Button(self.content,text="2 joueurs",command = self.notAvailable)
         self.button2p.pack()
 
+    def duel1p (self):
+        '''Duel joueur vs ia'''
+        #print(" hello ")
+        
+        self.refresh()
+
+        self.txt = Label(self.content, text="Bienvenue")
+        self.txt.pack()
+        
+        self.button1 = Button(self.content,text="Page d'accueil", command=self.menu)
+        self.button1.pack(side = "left")
+        
+        self.button2 = Button(self.content,text="Page d'accueil", command=self.menu)
+        self.button2.pack(side = "left")
+
+
+        self.button3 = Button(self.content,text="Page d'accueil", command=self.menu)
+        self.button3.pack(side = "left")
+
+####################################################################################################
+    
 def main ():
     interface = Interface()
-    interface.mainloop()
 
+####################################################################################################
 
 main()
