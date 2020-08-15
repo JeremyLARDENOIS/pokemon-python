@@ -37,8 +37,8 @@ def main(self):
 
     #self.reading = False
     self.dialogs = list()    #Tableau des dialogues
-    self.buttons = list()    #Tableau des dialogues
-    self.dialog_number= -1  #init
+    self.interactions = list()    #Tableau des dialogues
+    self.dialog_number= 0  #init
 
     #On crée ensuite des méthodes pour utiliser ca simplement
     def exit():
@@ -59,30 +59,17 @@ def main(self):
         self.write = Frame(self.content)
         self.write.pack(side="bottom")
 
-        #self.tabButton = list() 
-        #for cle,valeur in kwargs.items():
-        #    self.tabButton.append(Button(self.write,text=cle,command=valeur).pack())
-
         self.tabButton = list() 
-        for cle,valeur in self.buttons[self.dialog_number].items():
-            self.tabButton.append(Button(self.write,text=cle,command=valeur).pack())
+        for interaction in self.interactions[self.dialog_number]:
+            typeInteraction,message,fonction = interaction
+            if typeInteraction == "bouton":
+                self.tabButton.append(Button(self.write,text=message,command=fonction).pack())
 
-    def add_dial(msg, kwargs = 0):
+    def add_dial(msg,*kwargs):
         '''Affiche un message dans la frame de lecture'''
-        #printf (str(self.reading)+"\n")
-
-        '''
-        if self.reading:
-            self.io = IntVar()
-            self.fenetre.wait_variable(self.io)
-        '''
         self.dialogs.append(msg)
 
-        if kwargs == 1:
-            #On remets le meme bouton
-            self.buttons.append(self.buttons[len(self.buttons)-1]) 
-        else :
-            self.buttons.append(kwargs)
+        self.interactions.append(kwargs) #append tuple of tuple
 
 
     def next():
@@ -91,25 +78,14 @@ def main(self):
             self.dialog_number += 1
             upload()
 
+    bquit = ("bouton","Quitter",exit)
+    bnext = ("bouton","Next",next)
 
-    def button(kwargs):
-        '''
-        Affiche des boutons
-        Prends en argument un dictionnaire clé = texte et valeur = commande
-        '''
-        self.write.destroy()
-        self.write = Frame(self.content)
-        self.write.pack(side="bottom")
+    add_dial("hello",bquit,bnext)
+    add_dial("yo",bquit,bnext)
+    add_dial("Fin",bquit)
 
-        self.tabButton = list() 
-        for cle,valeur in kwargs.items():
-            self.tabButton.append(Button(self.write,text=cle,command=valeur).pack())
-            
-            
-    add_dial("hello",{"Quitter":exit,"Next":next})
     upload() #Voir pour mettre upload dans add_dial
-    add_dial("yo",1)
-    add_dial("hello world",{"Quitter":exit})
 
 
     #exit()
