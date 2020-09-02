@@ -46,9 +46,13 @@ class Interface(Frame):
     def menu(self):
         '''Page d'accueil'''
         def duel():
+            def duel1p():
+                import duel1p
+                duel1p.main(self)
+
             self.refresh()
 
-            self.button1p = Button(self.content,text="1 joueur", command = self.notAvailable)
+            self.button1p = Button(self.content,text="1 joueur", command = duel1p)
             self.button1p.pack()
 
             self.button2p = Button(self.content,text="2 joueurs",command = self.notAvailable)

@@ -6,76 +6,162 @@ from tkinter import *
 from random import randint
 from time import sleep
 
-def main(self):
+class Joueur:
+  """
+  Classe définissant les caracteristiques d'un joueur :
+  """
+  def __init__(j, name = ""):
+    """Constructeur de notre classe"""
+    j.name = name
+    j.pv=50         #PV de base
+    j.atq=15        #Attaque de base
+    j.soin=5        #Soin de base
+    j.catq=10       #Contre attaque       
+    j.coutca=5      #Cout de la contre attaque
+    j.choix = int() #Choix du type d'attaque
+
+def combat(j1,j2):
+    """Résolution du combat"""
+                  
+    bquit = ("bouton","Quitter",exit)
+    bnext = ("bouton","Ok",next)
+
+    #Les soins sont executées avant les attaques
+    if (j1.choix == "2"): #Soin du J1
+        add_dial(j1.name+" se soigne !",bnext)
+        gain = min(Joueur().pv,j1.pv+j1.soin) - j1.pv #On ne souhaite pas dépasser la limite de pv de base
+        j1.pv += gain
+        add_dial(j1.name+" a gagné "+str(gain)+" pv.\n",bnext)
+    if (j2.choix == "2"): #Soin du J2
+        add_dial(j2.name + " se soigne !",bnext)
+        gain = min(Joueur().pv,j2.pv+j2.soin) - j2.pv #On ne souhaite pas dépasser la limite de pv de base
+        j2.pv += gain
+        add_dial(j2.name+" a gagné "+str(gain)+" pv.\n",bnext)
+    if (j1.choix == "1"): #Atq du J1
+        add_dial(j1.name +" attaque !",bnext)
+        if (j2.choix == "3"): #Catq du J2
+            add_dial("Mais "+j2.name+" contre-attaque !",bnext)
+            j1.pv -= j2.catq
+            #j2.pv -= j2.coutca
+            add_dial(j1.name+" a perdu "+str(j2.atq)+" pv.\n",bnext)
+            #add_dial(j2.name+" a perdu "+str(j2.coutca)+" pv.\n")
+        else:
+            j2.pv -= j1.atq
+            add_dial(j2.name+" a perdu "+str(j1.atq)+" pv.\n",bnext)
+    if (j2.choix == "1"): #Atq du J2
+        add_dial(j2.name+" attaque !",bnext)
+        if (j1.choix == "3"): #Catq du J1
+            add_dial("Mais "+j1.name+" contre-attaque !",bnext)
+            #add_dial("Mais Joueur 1 contre-attaque et perds "+str(j1.coutca)+" pv!")
+            j2.pv -= j1.catq
+            #j1.pv -= j1.coutca
+            add_dial(j2.name+" a perdu "+str(j1.catq)+" pv.\n",bnext)
+            #add_dial(j1.name+" a perdu "+str(j1.coutca)+" pv.\n")
+        else:
+            j1.pv -= j2.atq
+            add_dial(j1.name+" a perdu "+str(j2.atq)+" pv.\n",bnext)
+    if ((j1.choix == "3")and(j2.choix != "1")):
+            add_dial(j1.name +" contre-attaque !",bnext)
+            add_dial("Mais c'est inefficace.\n",bnext)
+            j1.pv -= j1.coutca
+            add_dial(j1.name+" a perdu "+str(j1.coutca)+" pv.\n",bnext)
+    if ((j2.choix == "3")and(j1.choix != "1")):
+            add_dial(j2.name+" contre-attaque !",bnext)
+            add_dial("Mais c'est inefficace\n",bnext)
+            j2.pv -= j2.coutca
+            add_dial(j2.name+" a perdu "+str(j2.coutca)+" pv.\n",bnext)
+
+    #Si l'un des joueurs est mort
+    if ((j1.pv <= 0)and(j2.pv <= 0)):
+        add_dial("Les deux joueurs n'ont plus de pv, c'est une égalité !",bquit)
+    else:
+        if (j2.pv <= 0):
+            add_dial(j1.name+" a gagné !",bquit)
+        if (j1.pv <= 0):
+            add_dial(j2.name+" a gagné !",bquit)
+    #Sinon
+    choix(j1,j2)
+
+def choix(j1,j2):
+    """Permet au joueur de choisir quel action faire"""
+    #Le choix du j1 est choisi alors que celui de j2 est aléatoire
+    #ADD DIAL NOT DEFINED
+    def choix1():
+        j1.choix=1
+
+    def choix2():
+        j1.choix=2
+
+    def choix3():
+        j1.choix=3
+
+    bouton1 = ("bouton","Attaquer",choix1)
+    bouton2 = ("bouton","Attaquer",choix2)
+    bouton3 = ("bouton","Attaquer",choix3)
+    
+    add_dial("Que faites-vous ?",bouton1,bouton2,bouton3)
+
+    j2.choix=1 ###RENDRE ALEATOIRE
+
+    combat(j1,j2) #Permet de résoudre le tour
+
+def main(interface):
     """
     Debut du jeu
     """
-    self.refresh()
-
-    class Joueur:
-      """
-      Classe définissant les caracteristiques d'un joueur :
-      """
-      def __init__(j, name = ""):
-        """Constructeur de notre classe"""
-        j.name = name
-        j.pv=50       #PV de base
-        j.atq=15      #Attaque de base
-        j.soin=5      #Soin de base
-        j.catq=10     #Contre attaque       
-        j.coutca=5    #Cout de la contre attaque
+    interface.refresh()
 
 
 #################################################"
     #On crée une frame de lecture de donnée et une frame d'interaction
     #Un peu comme une Nintendo DS
-    self.read = Frame(self.content)
-    self.read.pack()
+    interface.read = Frame(interface.content)
+    interface.read.pack()
 
-    self.write = Frame(self.content)
-    self.write.pack(side="bottom")
+    interface.write = Frame(interface.content)
+    interface.write.pack(side="bottom")
 
-    #self.reading = False
-    self.dialogs = list()    #Tableau des dialogues
-    self.interactions = list()    #Tableau des dialogues
-    self.dialog_number= 0  #init
+    #interface.reading = False
+    interface.dialogs = list()    #Tableau des dialogues
+    interface.interactions = list()    #Tableau des dialogues
+    interface.dialog_number= 0  #init
 
     #On crée ensuite des méthodes pour utiliser ca simplement
     def exit():
-        self.read.destroy()
-        self.write.destroy()
-        self.menu()
+        interface.read.destroy()
+        interface.write.destroy()
+        interface.menu()
 
     def upload():
-        '''Mets a jour l'affichage de self.read'''
-        self.read.destroy()
-        self.read = Frame(self.content)
-        self.read.pack(side = "top")
+        '''Mets a jour l'affichage de interface.read'''
+        interface.read.destroy()
+        interface.read = Frame(interface.content)
+        interface.read.pack(side = "top")
 
-        self.txt = Label(self.read,text=self.dialogs[self.dialog_number])
-        self.txt.pack()
+        interface.txt = Label(interface.read,text=interface.dialogs[interface.dialog_number])
+        interface.txt.pack()
 
-        self.write.destroy()
-        self.write = Frame(self.content)
-        self.write.pack(side="bottom")
+        interface.write.destroy()
+        interface.write = Frame(interface.content)
+        interface.write.pack(side="bottom")
 
-        self.tabButton = list() 
-        for interaction in self.interactions[self.dialog_number]:
+        interface.tabButton = list() 
+        for interaction in interface.interactions[interface.dialog_number]:
             typeInteraction,message,fonction = interaction
             if typeInteraction == "bouton":
-                self.tabButton.append(Button(self.write,text=message,command=fonction).pack())
+                interface.tabButton.append(Button(interface.write,text=message,command=fonction).pack())
 
     def add_dial(msg,*kwargs):
         '''Affiche un message dans la frame de lecture'''
-        self.dialogs.append(msg)
+        interface.dialogs.append(msg)
 
-        self.interactions.append(kwargs) #append tuple of tuple
+        interface.interactions.append(kwargs) #append tuple of tuple
 
 
     def next():
         '''Permet de passer au add_dial suivant'''
-        if self.dialog_number < len(self.dialogs)-1:
-            self.dialog_number += 1
+        if interface.dialog_number < len(interface.dialogs)-1:
+            interface.dialog_number += 1
             upload()
 
     bquit = ("bouton","Quitter",exit)
@@ -117,8 +203,13 @@ Vous commencez avec "+ str(Joueur().pv)+" pv. \n",bnext)
     j1 = Joueur("Vous")
     
     j2 = Joueur("Le méchant")
+
+    #start = len(interface.dialogs)-1  #Début du combat
  
+    choix(j1,j2)
+    
     '''
+    ###############LE SYSTEME DE BOUCLE BLOQUE TKINTER !
     while ((j1.pv > 0)and(j2.pv > 0)):
         nb_tours +=1
         
@@ -133,8 +224,7 @@ Vous commencez avec "+ str(Joueur().pv)+" pv. \n",bnext)
         msg += "3 : Contre-attaque\n"
 
         add_dial(msg,bquit)
-
-        
+                
         #Réception des choix
         #choix1, choix2 = recv2()
         choix1 = input("Quel est votre choix ?\n")
