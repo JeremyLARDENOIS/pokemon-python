@@ -1,14 +1,19 @@
 # pokemon-python
+
 A simple combat platform online in round by round
 
-## For a simple use 
+## For a simple use
+
 You can use `server.py` for create a server and 2 `client.py` to try it
 
 ## Why this project ?
+
 This project was initialy a project that i made to enter in an engineer school, and it worked! 
 
 It's based on Pokemon and the game of Shi Fu Mi, where each attack do same difference of damage in function of your choose
+
 ## To Do
+
 - Verify functionment on Windows and MacOs
 - Create a Tkinter interface
 - Create a system of leveling
@@ -28,4 +33,5 @@ It's based on Pokemon and the game of Shi Fu Mi, where each attack do same diffe
 - Document the network protocol used
 
 ## Reporting and Contribution
+
 Don't hesitate to create issue and do some Pull Request if you want to participate/upgrade this project, ask questions or do some comments on this. Enjoy!
