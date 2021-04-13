@@ -18,19 +18,17 @@ It's based on Pokemon and the game of Shi Fu Mi, where each attack do same diffe
 - Create a Tkinter interface
 - Create a system of leveling
 - Create a system of 1vAI
-- Make sure that `server.py` doen't crash if clients crash 
+- Make sure that `server.py` doen't crash if clients crash
 - Send a message to one client if the other crash
-- Put network functions into a library and use this library or use another library/framework
 - Put game function into another file and use it
-- Put verbose mod for `client.py` and `server.py`
 - Make a function who find ip address automatically instead of localhost
-- Create a loop that enable to reask a response to client if the answer don't correspond to what we want
-- Upgrade network protocol
+- Create a loop that enable to re-ask a response in client if the answer don't correspond to what we want
+- Upgrade network protocol or use another library/framework
 - Make a multiplatform server (several combat in same time)
 - Bug on client when user write nothing when we ask him
 - Make a class for players
 - Put message to client when server stop but not clients
-- Document the network protocol used
+- Document and make test of network protocol used
 
 ## Reporting and Contribution
 
