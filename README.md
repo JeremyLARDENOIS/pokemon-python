@@ -20,8 +20,6 @@ It's based on Pokemon and the game of Shi Fu Mi, where each attack do same diffe
 - Create a system of 1vAI
 - Make sure that `server.py` doen't crash if clients crash
 - Send a message to one client if the other crash
-- Put game function into another file and use it
-- Make a function who find ip address automatically instead of localhost
 - Create a loop that enable to re-ask a response in client if the answer don't correspond to what we want
 - Upgrade network protocol or use another library/framework
 - Make a multiplatform server (several combat in same time)

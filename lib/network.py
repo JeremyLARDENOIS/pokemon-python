@@ -65,7 +65,7 @@ def recv (conn):
 def broadcast(conns, msg):
     """
     Send a message to all users
-    Arguments: msg
+    Arguments: conns = [conn1, conn2], msg
     """
     for conn in conns:
         send(conn,msg)
@@ -73,6 +73,7 @@ def broadcast(conns, msg):
 def recv2(conns):
     """
     Receive message from all users
+    Arguments: conns = [conn1, conn2],
     Returns: (msg1, msg2)
     """
     conn1 = conns[0]
