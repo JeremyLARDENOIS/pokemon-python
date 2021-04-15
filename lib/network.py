@@ -1,4 +1,3 @@
-####SERVER
 import sys
 
 verbose = sys.argv[0].endswith("server.py")
@@ -99,26 +98,3 @@ def recv2(conns):
         return recv2()              # Try again
 
     return (msg1,msg2)
-
-
-### CLIENT
-
-# def send_msg (msg):
-#     """
-#     Send a message to server
-#     Argument: msg
-#     """
-#     data = msg.encode("utf-8")
-#     socket.sendall(data)
-
-# def recv_msg ():
-#     """
-#     Receive a message from server
-#     Return: msg
-#     """
-#     data = socket.recv(255)
-#     msg = data.decode("utf-8") 
-#     return msg
-
-
-
