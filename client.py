@@ -7,27 +7,6 @@ port = 3333
 
 from lib.network import *
 
-######################################
-
-# def send_msg (msg):
-#     """
-#     Send a message to server
-#     Argument: msg
-#     """
-#     data = msg.encode("utf-8")
-#     socket.sendall(data)
-
-# def recv_msg ():
-#     """
-#     Receive a message from server
-#     Return: msg
-#     """
-#     data = socket.recv(255)
-#     msg = data.decode("utf-8") 
-#     return msg
-
-##########################################################
-
 socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 try :
