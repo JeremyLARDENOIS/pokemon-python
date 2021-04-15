@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
+from lib.network import *
 import socket
 
 host = ""
 port = 3333
-
-from lib.network import *
 
 socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
