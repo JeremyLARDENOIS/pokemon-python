@@ -6,8 +6,8 @@ port = 3333
 
 import socket
 
-from lib.network import *
-from lib.game import *
+from lib.network import send_msg, recv_msg
+from lib.game import game
 
 ##################################MAIN#############################################
 socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)   # Type de connexion

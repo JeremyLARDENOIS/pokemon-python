@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from lib.network import *
+from lib.network import send_msg, recv_msg
 import socket
 
 host = ""
