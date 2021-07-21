@@ -34,6 +34,7 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Make a class for players
 - Alert the client if the server crashes
 - Record the user's network protocol
+- Add library `typing` and use of it
 
 ## Bug Reports and Contributions
 
