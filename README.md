@@ -10,6 +10,7 @@
 <h2 align="center">A simple, online, round-by-round combat platform.</h2>
 
 ---
+
 ## Simple functionality
 
 You can use `server.py` to create a server and `client.py` to join an existing server.
@@ -35,11 +36,17 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Alert the client if the server crashes
 - Record the user's network protocol
 - Add library `typing` and use of it
+- Tests the lib
 
 ## Bug Reports and Contributions
 
 Don't hesitate to create Issues or Pull Request if you want to contribute to this project, ask questions, or just give feedback. Enjoy!
 
+## Crédits
+
+Main coder: [JérémyLARDENOIS](https://github.com/JeremyLARDENOIS)
+Beautify and correct errors in README: [TurnipGuy30](https://github.com/TurnipGuy30)
+
 <!--
-  ~ README created by @TurnipGuy30 ~ Find me at GitHub.com/TurnipGuy30 ~
+  ~ README upgraded by @TurnipGuy30 ~ Find me at GitHub.com/TurnipGuy30 ~
 -->
