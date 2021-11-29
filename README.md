@@ -26,17 +26,20 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Verify functionality on Windows and MacOS
 - Create a `Tkinter` interface
 - Create a system of levelling
-- Create a system of Player-versus-AI
+- Create a system of Player-versus-AI (look dev branch)
 - Make sure that `server.py` doesn't crash if clients crash
 - Send a message to one client if the other crashes
 - Create a loop to re-ask for a response if the client's input is invalid, or if they take too long to answer
 - Upgrade network protocol or use another library/framework
 - Make a multi-platform server (several combat instances at the same time)
-- Make a class for players
 - Alert the client if the server crashes
 - Record the user's network protocol
 - Add library `typing` and use of it
-- Tests the lib
+- Implement tests
+- Implement defense/armor caracteristics
+- Add possibility to put options in arguments (ports, address ...)
+- Create differents class of player
+- Close socket when server crash except if mode restart always
 
 ## Bug Reports and Contributions
 
@@ -45,6 +48,7 @@ Don't hesitate to create Issues or Pull Request if you want to contribute to thi
 ## Crédits
 
 Main coder: [JérémyLARDENOIS](https://github.com/JeremyLARDENOIS)
+
 Beautify and correct errors in README: [TurnipGuy30](https://github.com/TurnipGuy30)
 
 <!--
