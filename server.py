@@ -24,10 +24,10 @@ class Server:
         if True:
             conn, addr = self.socket.accept()
             print(f"Client connected from {addr}")
-            user = User("", conn, addr, len(self.users))
+            user = User("", conn, addr, len(self.users)+1)
             self.users.append(user)
 
-            # TO REMOVE
+            # Useless but necessary
             # Send id to client and wait for "OK"
             send_msg(conn, str(user.id))
             if recv_msg(conn) == "OK":
@@ -77,6 +77,9 @@ if __name__ == "__main__":
         server.stop()
         print("Server stopped")
         exit(0)
+    except OSError:
+        print("Address already in use")
+        exit(1)
     except Exception as e:
         print("Fatal error: ", e)
         server.stop()
