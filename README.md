@@ -25,7 +25,7 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 
 - Verify functionality on Windows and MacOS
 - Create a `Tkinter` interface
-- Create a system of levelling
+- Create a system of levelling up
 - Create a system of Player-versus-AI (look dev branch)
 - Make sure that `server.py` doesn't crash if clients crash
 - Send a message to one client if the other crashes
@@ -40,6 +40,7 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Add possibility to put options in arguments (ports, address ...)
 - Create differents class of player
 - Close socket when server crash except if mode restart always
+- Verify user entry
 
 ## Bug Reports and Contributions
 

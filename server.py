@@ -3,6 +3,7 @@
 
 from lib.game import game
 from lib.network import send_msg, recv_msg
+from lib.user import User
 import socket
 host = ""
 port = 3333
@@ -19,56 +20,53 @@ socket.listen(3)
 
 try:
     while True:                                                 # The server doesn't close at the end of the game
-        id_player = 1
-
         # Clients connection
-        conn1, addr1 = socket.accept()                          # Waiting for clients
-        print(conn1)
-        print("Connection", id_player, "accepted")
+        conn, addr = socket.accept()
+        user1 = User("", conn, addr, 1)
+        print(user1.id, "connected")
 
-        send_msg(conn1, id_player)
-        msg = recv_msg(conn1)
+        send_msg(user1.conn, user1.id)
+        msg = recv_msg(user1.conn)
         if (msg == "OK"):
-            print(id_player, "connected players")
-            print(addr1)
-            id_player += 1
+            print("1 connected player")
+            print(user1.addr)
         else:
             print("Connection failed")
             print("Exiting...")
             exit(1)  # Stop server
 
         # Second client
-        conn2, addr2 = socket.accept()
-        print("Connection", id_player, "accepted")
+        conn, addr = socket.accept()
+        user2 = User("", conn, addr, 2)
+        print(user2.id, "connected")
 
-        send_msg(conn2, id_player)
-        msg = recv_msg(conn2)
+        send_msg(user2.conn, user2.id)
+        msg = recv_msg(user2.conn)
         if (msg == "OK"):
-            print(id_player, "connected players")
-            print(addr2)
-            id_player += 1
+            print("2 connected players")
+            print(user2.addr)
         else:
             print("connection failed")
             print("Exiting...")
             exit(1)  # Stop server
 
-        send_msg(conn1, "READY")
-        send_msg(conn2, "READY")
+        send_msg(user1.conn, "READY")
+        send_msg(user2.conn, "READY")
 
-        msg1 = recv_msg(conn1)
-        msg2 = recv_msg(conn2)
+        msg1 = recv_msg(user1.conn)
+        msg2 = recv_msg(user2.conn)
         if ((msg1 == "READY") and (msg2 == "READY")):
             print("CONNECTION SUCCESSFULL")
 
         ###################################
-        game(conn1, conn2)  # Launch the game
+        game(user1, user2)  # Launch the game
         ###################################
 
         # Déconnexion
-        send_msg(conn1, "STOP")
-        send_msg(conn2, "STOP")
-        conn1.close()
-        conn2.close()
+        send_msg(user1.conn, "STOP")
+        send_msg(user2.conn, "STOP")
+        user1.conn.close()
+        user2.conn.close()
 
 finally:
     socket.close()
