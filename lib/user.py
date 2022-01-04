@@ -14,3 +14,11 @@ class User:
         self.conn = conn    # Connection
         self.addr = addr    # Address
         self.id = id        # Id
+
+    def __str__(self):
+        """String of user"""
+        return f"{self.name} : {self.hp} hp"
+
+    def stop(self):
+        """Stop user"""
+        self.conn.close()

@@ -9,64 +9,75 @@ host = ""
 port = 3333
 
 
+class Server:
+    def __init__(self) -> None:
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.bind((host, port))
+        self.socket.listen(5)
+        self.users = []
+
+    def listen(self) -> None:
+        """
+        Accept connections from clients and create a new thread for each one
+        """
+        # while True:
+        if True:
+            conn, addr = self.socket.accept()
+            print(f"Client connected from {addr}")
+            user = User("", conn, addr, len(self.users))
+            self.users.append(user)
+
+            # TO REMOVE
+            # Send id to client and wait for "OK"
+            send_msg(conn, str(user.id))
+            if recv_msg(conn) == "OK":
+                print(f"Client {user.id} connected")
+                # Send "READY" to client
+                send_msg(conn, "READY")
+                # Wait for "READY" from client
+                if recv_msg(conn) == "READY":
+                    pass
+                    # user.start()
+
+    def stop(self) -> None:
+        """
+        Stop the server
+        """
+        for user in self.users:
+            user.stop()
+        self.socket.close()
+
+    def unconnect(self, user: User) -> None:
+        """
+        Unconnect the user
+        """
+        self.users.remove(user)
+        user.stop()
+
+    def game(self):
+        """
+        Start a game
+        """
+        game(self.users)
+
+
 ##################################MAIN#############################################
-socket = socket.socket(
-    socket.AF_INET, socket.SOCK_STREAM)   # Connection type
-# Establishment of the server connection
-socket.bind((host, port))
-print("Launching server")
-# Number of attempts allowed
-socket.listen(3)
-
-try:
-    while True:                                                 # The server doesn't close at the end of the game
-        # Clients connection
-        conn, addr = socket.accept()
-        user1 = User("", conn, addr, 1)
-        print(user1.id, "connected")
-
-        send_msg(user1.conn, user1.id)
-        msg = recv_msg(user1.conn)
-        if (msg == "OK"):
-            print("1 connected player")
-            print(user1.addr)
-        else:
-            print("Connection failed")
-            print("Exiting...")
-            exit(1)  # Stop server
-
-        # Second client
-        conn, addr = socket.accept()
-        user2 = User("", conn, addr, 2)
-        print(user2.id, "connected")
-
-        send_msg(user2.conn, user2.id)
-        msg = recv_msg(user2.conn)
-        if (msg == "OK"):
-            print("2 connected players")
-            print(user2.addr)
-        else:
-            print("connection failed")
-            print("Exiting...")
-            exit(1)  # Stop server
-
-        send_msg(user1.conn, "READY")
-        send_msg(user2.conn, "READY")
-
-        msg1 = recv_msg(user1.conn)
-        msg2 = recv_msg(user2.conn)
-        if ((msg1 == "READY") and (msg2 == "READY")):
-            print("CONNECTION SUCCESSFULL")
-
-        ###################################
-        game(user1, user2)  # Launch the game
-        ###################################
-
-        # Déconnexion
-        send_msg(user1.conn, "STOP")
-        send_msg(user2.conn, "STOP")
-        user1.conn.close()
-        user2.conn.close()
-
-finally:
-    socket.close()
+if __name__ == "__main__":
+    try:
+        server = Server()
+        print("Server is running...")
+        server.listen()
+        server.listen()
+        print("Sending game...")
+        server.game()
+        server.stop()
+        print("Server is stopped")
+    except KeyboardInterrupt:
+        print("\nStopping server...")
+        server.stop()
+        print("Server stopped")
+        exit(0)
+    except Exception as e:
+        print("Fatal error: ", e)
+        server.stop()
+        exit(1)

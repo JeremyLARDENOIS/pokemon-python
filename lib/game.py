@@ -2,11 +2,13 @@ from lib.network import *
 from lib.user import User
 
 
-def game(user1, user2):
+def game(users):
     """
     Game
-    Arguments: conn1, conn2
+    Arguments: users
     """
+    user1 = users[0]
+    user2 = users[1]
     conns = [user1.conn, user2.conn]
 
     broadcast(
