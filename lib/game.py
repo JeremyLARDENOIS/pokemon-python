@@ -1,5 +1,5 @@
 from lib.network import *
-from lib.player import *
+from lib.user import User
 
 
 def game(conn1, conn2):
@@ -8,23 +8,23 @@ def game(conn1, conn2):
     Arguments: conn1, conn2
     """
     conns = [conn1, conn2]
-    players = [Player(), Player()]
+    players = [User(), User()]
 
     broadcast(
         conns, "=========================================================================")
 
     msg = "Welcome on the Pokemon plateform combat online!\n\n"
     msg += "The objective is to put K.O. your opponent in putting his HP to 0\n"
-    msg += "You start with " + str(Player().hp) + " hp.\n"
+    msg += "You start with " + str(User().hp) + " hp.\n"
     msg += "To do this, you have 3 possibilities:"
     broadcast(conns, msg)
 
-    msg = "A attack who inflict " + str(Player().atk) + " hp\n"
-    msg += "A heal who restore " + str(Player().heal) + "hp\n"
+    msg = "A attack who inflict " + str(User().atk) + " hp\n"
+    msg += "A heal who restore " + str(User().heal) + "hp\n"
     msg += "A counter attack who cancel enemy damages and return " + \
-        str(Player().catk) + "hp against him\n"
+        str(User().catk) + "hp against him\n"
     msg += "But if the ennemy doesn't make you damage, you loose " + \
-        str(Player().costca) + "hp"
+        str(User().costca) + "hp"
 
     broadcast(conns, msg)
 
@@ -58,14 +58,14 @@ def game(conn1, conn2):
         if (choix1 == "2"):                     # Heal of player 1
             broadcast(conns, players[0].name+" heals himself!")
             # We don't want to exceed the basic hp limit
-            gain = min(Player().hp, players[0].hp +
+            gain = min(User().hp, players[0].hp +
                        players[0].heal) - players[0].hp
             players[0].hp += gain
             broadcast(conns, players[0].name+" won "+str(gain)+" hp.\n")
         if (choix2 == "2"):                     # Heal of player 2
             broadcast(conns, players[1].name+" heals himself!")
             # We don't want to exceed the basic hp limit
-            gain = min(Player().hp, players[1].hp +
+            gain = min(User().hp, players[1].hp +
                        players[1].heal) - players[1].hp
             players[1].hp += gain
             broadcast(conns, players[1].name+" won "+str(gain)+" hp.\n")
