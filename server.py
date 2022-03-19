@@ -5,8 +5,30 @@ from lib.game import game
 from lib.network import send_msg, recv_msg
 from lib.user import User
 import socket
-host = ""
-port = 3333
+import argparse
+
+argparser = argparse.ArgumentParser()
+argparser.add_argument(
+    "-H",
+    "--host",
+    help="host of the server, default is localhost",
+    default="localhost")
+argparser.add_argument(
+    "-p",
+    "--port",
+    help="port to listen",
+    type=int,
+    default=3333)
+argparser.add_argument(
+    "-v",
+    "--verbose",
+    help="increase output verbosity",
+    action="store_true")
+args = argparser.parse_args()
+
+host = args.host
+port = args.port
+# verbose = args.verbose
 
 
 class Server:
@@ -65,7 +87,7 @@ class Server:
 if __name__ == "__main__":
     try:
         server = Server()
-        print("Server is running...")
+        print(f"Server is running on {host}:{port}")
         server.listen()
         server.listen()
         print("Sending game...")

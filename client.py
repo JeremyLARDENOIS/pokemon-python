@@ -2,9 +2,30 @@
 
 from lib.network import send_msg, recv_msg
 import socket
+import argparse
 
-host = ""
-port = 3333
+argparser = argparse.ArgumentParser()
+argparser.add_argument(
+    "-H",
+    "--host",
+    help="host of the server, default is localhost",
+    default="localhost")
+argparser.add_argument(
+    "-p",
+    "--port",
+    help="port to listen",
+    type=int,
+    default=3333)
+argparser.add_argument(
+    "-v",
+    "--verbose",
+    help="increase output verbosity",
+    action="store_true")
+args = argparser.parse_args()
+
+host = args.host
+port = args.port
+# verbose = args.verbose
 
 
 class Client:
@@ -75,7 +96,7 @@ class Client:
 if __name__ == "__main__":
     try:
         client = Client(host, port)
-        print("Connected to server")
+        print(f"Connected to server on {host}:{port}")
         client.get_id()
         client.ready()
         client.communicate()

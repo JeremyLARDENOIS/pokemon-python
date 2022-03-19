@@ -15,6 +15,22 @@
 
 You can use `server.py` to create a server and `client.py` to join an existing server.
 
+## With parameters
+
+Default IP is localhost and default port is 3333. You can change this setting on the server and client using the CLI.
+
+Example for server:
+
+```sh
+./server.py --host 127.0.0.2 --port 1234
+```
+
+Equivalent example for client:
+
+```sh
+./client.py --host 127.0.0.2 --port 1234
+```
+
 ## What's the purpose?
 
 This project was initially a project I made to enter into an Engineer school, and it worked!
@@ -37,7 +53,6 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Add library `typing` and use of it
 - Implement tests
 - Implement defense/armor caracteristics
-- Add possibility to put options in arguments (ports, address ...)
 - Create differents class of player
 - Close socket when server crash except if mode restart always
 - Verify user entry
