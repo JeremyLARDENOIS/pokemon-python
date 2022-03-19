@@ -4,7 +4,7 @@ from lib.network import send_msg, recv_msg
 import socket
 import argparse
 
-argparser = argparse.ArgumentParser()
+argparser: argparse.ArgumentParser = argparse.ArgumentParser()
 argparser.add_argument(
     "-H",
     "--host",
@@ -21,18 +21,18 @@ argparser.add_argument(
     "--verbose",
     help="increase output verbosity",
     action="store_true")
-args = argparser.parse_args()
+args: argparse.ArgumentParser = argparser.parse_args()
 
-host = args.host
-port = args.port
+host: str = args.host
+port: int = args.port
 # verbose = args.verbose
 
 
 class Client:
     def __init__(self, host: str, port: int) -> None:
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((host, port))
-        self.id = None
+        self.id: int = None
 
     def send(self, msg: str) -> None:
         send_msg(self.socket, msg)
@@ -52,7 +52,7 @@ class Client:
         Get the id of the client
         Useless but necessary
         """
-        self.id = int(self.recv())
+        self.id: int = int(self.recv())
         print(f"Your id is {self.id}")
         self.send("OK")
 
@@ -95,7 +95,7 @@ class Client:
 
 if __name__ == "__main__":
     try:
-        client = Client(host, port)
+        client: Client = Client(host, port)
         print(f"Connected to server on {host}:{port}")
         client.get_id()
         client.ready()

@@ -7,7 +7,7 @@ from lib.user import User
 import socket
 import argparse
 
-argparser = argparse.ArgumentParser()
+argparser: argparse.ArgumentParser = argparse.ArgumentParser()
 argparser.add_argument(
     "-H",
     "--host",
@@ -26,17 +26,17 @@ argparser.add_argument(
     action="store_true")
 args = argparser.parse_args()
 
-host = args.host
-port = args.port
+host: str = args.host
+port: int = args.port
 # verbose = args.verbose
 
 
 class Server:
     def __init__(self) -> None:
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((host, port))
         self.socket.listen(5)
-        self.users = []
+        self.users: list[User] = []
 
     def listen(self) -> None:
         """
@@ -46,7 +46,7 @@ class Server:
         if True:
             conn, addr = self.socket.accept()
             print(f"Client connected from {addr}")
-            user = User("", conn, addr, len(self.users)+1)
+            user: User = User("", conn, addr, len(self.users)+1)
             self.users.append(user)
 
             # Useless but necessary
@@ -86,7 +86,7 @@ class Server:
 ##################################MAIN#############################################
 if __name__ == "__main__":
     try:
-        server = Server()
+        server: Server = Server()
         print(f"Server is running on {host}:{port}")
         server.listen()
         server.listen()
