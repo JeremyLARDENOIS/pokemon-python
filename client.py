@@ -25,7 +25,7 @@ args: argparse.ArgumentParser = argparser.parse_args()
 
 host: str = args.host
 port: int = args.port
-# verbose = args.verbose
+verbose = args.verbose
 
 
 class Client:
@@ -96,7 +96,8 @@ class Client:
 if __name__ == "__main__":
     try:
         client: Client = Client(host, port)
-        print(f"Connected to server on {host}:{port}")
+        if verbose:
+            print(f"Connected to server on {host}:{port}")
         client.get_id()
         client.ready()
         client.communicate()

@@ -28,7 +28,7 @@ args = argparser.parse_args()
 
 host: str = args.host
 port: int = args.port
-# verbose = args.verbose
+verbose = args.verbose
 
 
 class Server:
@@ -90,7 +90,8 @@ if __name__ == "__main__":
         print(f"Server is running on {host}:{port}")
         server.listen()
         server.listen()
-        print("Sending game...")
+        if verbose:
+            print("Sending game...")
         server.game()
         server.stop()
         print("Server is stopped")

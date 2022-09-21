@@ -1,5 +1,6 @@
 import sys
 
+# need to be change
 verbose = sys.argv[0].endswith("server.py")
 
 
@@ -10,8 +11,9 @@ def send_msg(conn, msg):
     msg: str = str(msg)
     data: bytes = msg.encode("utf-8")
     conn.sendall(data)
-    addr = str(conn).split(',')[6].split("'")[1]  # Get IP from conn
-    port = str(conn).split(',')[7].split(")")[0][1:]  # Get port from conn
+    # maybe can get in another way
+    addr: str = str(conn).split(',')[6].split("'")[1]  # Get IP from conn
+    port: str = str(conn).split(',')[7].split(")")[0][1:]  # Get port from conn
     if (verbose):
         print(f"{addr} {port} -> {msg}")
 
