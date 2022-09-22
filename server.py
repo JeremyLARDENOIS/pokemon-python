@@ -33,7 +33,7 @@ verbose = args.verbose
 
 class Server:
     def __init__(self) -> None:
-        self.socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((host, port))
         self.socket.listen(5)
         self.users: list[User] = []
@@ -76,7 +76,7 @@ class Server:
         self.users.remove(user)
         user.stop()
 
-    def game(self):
+    def game(self) -> None:
         """
         Start a game
         """

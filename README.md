@@ -37,10 +37,16 @@ This project was initially a project I made to enter into an Engineer school, an
 
 It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-Fu-Mi), where each attack does damage based on the attack of the opponent.
 
+## Test of type (with mypy)
+
+```sh
+mypy server.py client.py
+```
+
 ## To Do
 
 - Verify functionality on Windows and MacOS
-- Create a `Tkinter` interface
+- Create a `Tkinter` or web interface
 - Create a system of levelling up
 - Create a system of Player-versus-AI (look dev branch)
 - Make sure that `server.py` doesn't crash if clients crash
@@ -50,7 +56,6 @@ It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-F
 - Make a multi-platform server (several combat instances at the same time)
 - Alert the client if the server crashes
 - Record the user's network protocol
-- Add library `typing` and use of it
 - Implement tests
 - Implement defense/armor caracteristics
 - Create differents class of player

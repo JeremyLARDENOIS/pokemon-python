@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Optional
 from lib.network import send_msg, recv_msg
 import socket
 import argparse
@@ -21,7 +22,7 @@ argparser.add_argument(
     "--verbose",
     help="increase output verbosity",
     action="store_true")
-args: argparse.ArgumentParser = argparser.parse_args()
+args = argparser.parse_args()
 
 host: str = args.host
 port: int = args.port
@@ -30,9 +31,9 @@ verbose = args.verbose
 
 class Client:
     def __init__(self, host: str, port: int) -> None:
-        self.socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((host, port))
-        self.id: int = None
+        self.id: Optional[int] = None
 
     def send(self, msg: str) -> None:
         send_msg(self.socket, msg)
@@ -52,7 +53,7 @@ class Client:
         Get the id of the client
         Useless but necessary
         """
-        self.id: int = int(self.recv())
+        self.id = int(self.recv())
         print(f"Your id is {self.id}")
         self.send("OK")
 

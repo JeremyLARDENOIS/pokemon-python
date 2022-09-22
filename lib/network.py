@@ -1,14 +1,15 @@
+from socket import socket
 import sys
+from typing import List, Optional, Tuple
 
 # need to be change
 verbose = sys.argv[0].endswith("server.py")
 
 
-def send_msg(conn, msg):
+def send_msg(conn: socket, msg: str) -> None:
     """Send a message msg to conn connection
     Arguments: conn, msg
     """
-    msg: str = str(msg)
     data: bytes = msg.encode("utf-8")
     conn.sendall(data)
     # maybe can get in another way
@@ -18,7 +19,7 @@ def send_msg(conn, msg):
         print(f"{addr} {port} -> {msg}")
 
 
-def recv_msg(conn):
+def recv_msg(conn: socket) -> str:
     """ Get a message from conn connection
     Arguments: conn
     Return: msg
@@ -32,9 +33,9 @@ def recv_msg(conn):
     return msg
 
 
-def send(conn, msg):
+def send(conn: socket, msg: str) -> None:
     """
-    Allow to send a message msg on a connection conn on a safe way    
+    Allow to send a message msg on a connection conn on a safe way
     Arguments: conn, msg
     """
     send_msg(conn, "READ")          # Send "READ"
@@ -52,9 +53,9 @@ def send(conn, msg):
         send(conn, msg)
 
 
-def recv(conn):
+def recv(conn: socket) -> str:
     """
-    Allow to receive a message msg from a connection conn on a safe way    
+    Allow to receive a message msg from a connection conn on a safe way
     Arguments: conn
     Return: msg
     """
@@ -68,7 +69,7 @@ def recv(conn):
     return msg
 
 
-def broadcast(conns, msg):
+def broadcast(conns: List[socket], msg: str) -> None:
     """
     Send a message to all users
     Arguments: conns = [conn1, conn2], msg
@@ -77,7 +78,7 @@ def broadcast(conns, msg):
         send(conn, msg)
 
 
-def recv2(conns):
+def recv2(conns: List[socket]) -> Tuple[str, str]:
     """
     Receive message from all users
     Arguments: conns = [conn1, conn2],
@@ -103,6 +104,6 @@ def recv2(conns):
         send_msg(conn2, "OK")        # Send "OK" to player 2
         recv_msg(conn2)             # Receive status from player 2
     else:                           # If one of status isn't "OK"
-        return recv2()              # Try again
+        return recv2(conns)              # Try again
 
     return (msg1, msg2)
