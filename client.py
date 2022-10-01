@@ -34,7 +34,11 @@ class Client:
 
     def __init__(self, host: str, port: int) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((host, port))
+        try:
+            self.socket.connect((host, port))
+        except ConnectionRefusedError:
+            print("ERROR: Connection refused")
+            sys.exit(1)
         self.connection_id: Optional[int] = None
 
     def send(self, msg: str) -> None:

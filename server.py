@@ -15,7 +15,7 @@ argparser.add_argument(
     "-H",
     "--host",
     help="host of the server, default is localhost",
-    default="localhost")
+    default="0.0.0.0")
 argparser.add_argument(
     "-p",
     "--port",
