@@ -37,6 +37,13 @@ This project was initially a project I made to enter into an Engineer school, an
 
 It's based on Pokemon and the game of Roshambo (AKA Rock-Paper-Scissors or Shi-Fu-Mi), where each attack does damage based on the attack of the opponent.
 
+## Test of lint (with pylint)
+
+```sh
+pylint server.py
+pylint client.py
+```
+
 ## Test of type (with mypy)
 
 ```sh
@@ -61,6 +68,9 @@ mypy server.py client.py
 - Create differents class of player
 - Close socket when server crash except if mode restart always
 - Verify user entry
+- Make git pre-hooks mypy, pylint and explain how to use it in Readme
+- Make a dockerfile for server
+- Make `server.py` continue to listen at the infinite
 
 ## Bug Reports and Contributions
 

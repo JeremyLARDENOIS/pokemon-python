@@ -1,3 +1,5 @@
+'''Module of the class User'''
+
 from socket import socket
 
 

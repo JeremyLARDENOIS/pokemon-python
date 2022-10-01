@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+# coding:utf-8
 
-from typing import Optional
-from lib.network import send_msg, recv_msg
+'''Client for the game'''
+
+import sys
 import socket
 import argparse
+from typing import Optional
+from lib.network import send_msg, recv_msg
 
 argparser: argparse.ArgumentParser = argparse.ArgumentParser()
 argparser.add_argument(
@@ -14,7 +18,7 @@ argparser.add_argument(
 argparser.add_argument(
     "-p",
     "--port",
-    help="port to listen",
+    help="port of the server",
     type=int,
     default=3333)
 argparser.add_argument(
@@ -24,37 +28,35 @@ argparser.add_argument(
     action="store_true")
 args = argparser.parse_args()
 
-host: str = args.host
-port: int = args.port
-verbose = args.verbose
-
 
 class Client:
+    """Class that handle the network client for the game"""
+
     def __init__(self, host: str, port: int) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((host, port))
-        self.id: Optional[int] = None
+        self.connection_id: Optional[int] = None
 
     def send(self, msg: str) -> None:
+        """Send a message in the socket"""
         send_msg(self.socket, msg)
 
     def recv(self) -> str:
+        """Get a string from the socket"""
         return recv_msg(self.socket)
 
-    def stop(self) -> int:
-        try:
+    def stop(self) -> None:
+        """Stop the client socket"""
+        if self.socket:
             self.socket.close()
-            return 0
-        except:
-            return 1
 
     def get_id(self) -> None:
         """
         Get the id of the client
         Useless but necessary
         """
-        self.id = int(self.recv())
-        print(f"Your id is {self.id}")
+        self.connection_id = int(self.recv())
+        print(f"Your id is {self.connection_id}")
         self.send("OK")
 
     def ready(self) -> None:
@@ -71,24 +73,26 @@ class Client:
         """
         print("Starting communication")
         status = recv_msg(self.socket)
-        while ((status != "") and (status != "STOP")):
-            if (status == "READ"):  #  If he wants to print something
+        # while ((status != "") and (status != "STOP")):
+        while status not in ("", "STOP"):
+            if status == "READ":  #  If he wants to print something
                 send_msg(self.socket, "OK")          # We answer "OK"
                 msg = recv_msg(self.socket)        # He send the message
                 print(msg)              # We print it
-                if (msg != ""):         # And if it was ok
+                if msg != "":         # And if it was ok
                     send_msg(self.socket, "OK")       # We answer "OK"
-            if (status == "WRITE"):     # If we wants some information
+            if status == "WRITE":     # If we wants some information
                 msg = input('-> ')      # User enter a message
                 send_msg(self.socket, msg)           # And we send it
                 # status = recv_msg()
-            if (status == "OK"):        # If we receive "OK"
+            if status == "OK":        # If we receive "OK"
                 send_msg(self.socket, "OK")          # We answer "OK"
-            if (status == "WRITE2"):    # Write v2 : allow to send message in same time that other user
+            # Write v2 : allow to send message in same time that other user
+            if status == "WRITE2":
                 msg = input('-> ')      # User enter a message
                 # We say that we are ok for sending
                 send_msg(self.socket, "OK")
-            if (status == "SEND"):      # If he wants the message,
+            if status == "SEND":      # If he wants the message,
                 send_msg(self.socket, msg)           # We send it
 
             status = recv_msg(self.socket)
@@ -96,17 +100,16 @@ class Client:
 
 if __name__ == "__main__":
     try:
-        client: Client = Client(host, port)
-        if verbose:
-            print(f"Connected to server on {host}:{port}")
+        client: Client = Client(args.host, args.port)
+        if args.verbose:
+            print(f"Connected to server on {args.host}:{args.port}")
         client.get_id()
         client.ready()
         client.communicate()
-        # Stop the client and return 0 if everything is ok
-        exit(client.stop())
+        # Stop the client and return 0
+        client.stop()
+        sys.exit(0)
     except KeyboardInterrupt:
         print("\nStopping client...")
-        exit(client.stop())
-    except Exception as e:
-        print("Fatal error: ", e)
-        exit(client.stop() + 1)
+        client.stop()
+        sys.exit(0)

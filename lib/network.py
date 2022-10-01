@@ -1,6 +1,8 @@
+'''Module of the networks functions for handle socket'''
+
 from socket import socket
 import sys
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 # need to be change
 verbose = sys.argv[0].endswith("server.py")
@@ -15,7 +17,7 @@ def send_msg(conn: socket, msg: str) -> None:
     # maybe can get in another way
     addr: str = str(conn).split(',')[6].split("'")[1]  # Get IP from conn
     port: str = str(conn).split(',')[7].split(")")[0][1:]  # Get port from conn
-    if (verbose):
+    if verbose:
         print(f"{addr} {port} -> {msg}")
 
 
@@ -28,7 +30,7 @@ def recv_msg(conn: socket) -> str:
     msg = data.decode("utf-8")
     addr = str(conn).split(',')[6].split("'")[1]  # Get IP from conn
     port = str(conn).split(',')[7].split(")")[0][1:]  # Get port from conn
-    if (verbose):
+    if verbose:
         print(f"{addr} {port} <- {msg}")
     return msg
 
@@ -41,11 +43,11 @@ def send(conn: socket, msg: str) -> None:
     send_msg(conn, "READ")          # Send "READ"
     status = recv_msg(conn)         # Recv status
     # If status is "OK", we send the message
-    if (status == "OK"):
+    if status == "OK":
         send_msg(conn, msg)
         status = recv_msg(conn)
         # While status isn't "OK", we send the message again
-        while (status != "OK"):
+        while status != "OK":
             send_msg(conn, msg)
             status = recv_msg(conn)
     # If status isn't "OK", we try again
@@ -61,7 +63,7 @@ def recv(conn: socket) -> str:
     """
     send_msg(conn, "WRITE")          # Send "WRITE"
     msg = recv_msg(conn)            # We receive the message
-    if (msg == ""):                 # If no message, try again
+    if msg == "":                 # If no message, try again
         msg = recv(conn)
     else:                           # If receive something
         send_msg(conn, "OK")         # Send "OK"

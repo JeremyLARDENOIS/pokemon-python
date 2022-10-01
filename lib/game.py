@@ -1,3 +1,5 @@
+'''Module of the game function'''
+
 from socket import socket
 from typing import List
 import lib.network as n
@@ -58,23 +60,23 @@ def game(users: List[User]) -> None:
         choice1, choice2 = n.recv2(conns)  # Reception of choices
         # Implementation of them
         # Heals are executed before attacks
-        if (choice1 == "2"):                     # Heal of player 1
+        if choice1 == "2":                     # Heal of player 1
             n.broadcast(conns, user1.name+" heals himself!")
             # We don't want to exceed the basic hp limit
             gain = min(User.hp, user1.hp +
                        user1.heal) - user1.hp
             user1.hp += gain
             n.broadcast(conns, user1.name+" won "+str(gain)+" hp.\n")
-        if (choice2 == "2"):                     # Heal of player 2
+        if choice2 == "2":                     # Heal of player 2
             n.broadcast(conns, user2.name+" heals himself!")
             # We don't want to exceed the basic hp limit
             gain = min(User.hp, user2.hp +
                        user2.heal) - user2.hp
             user2.hp += gain
             n.broadcast(conns, user2.name+" won "+str(gain)+" hp.\n")
-        if (choice1 == "1"):                     # Attack of player 1
+        if choice1 == "1":                     # Attack of player 1
             n.broadcast(conns, user1.name + " attack!")
-            if (choice2 == "3"):                 # If player 2 do counter attack
+            if choice2 == "3":                 # If player 2 do counter attack
                 n.broadcast(conns, "But " + user2.name + " counter-attack!")
                 user1.hp -= user2.catk
                 n.broadcast(conns, user1.name+" lost " +
@@ -83,9 +85,9 @@ def game(users: List[User]) -> None:
                 user2.hp -= user1.atk
                 n.broadcast(conns, user2.name +
                             " lost "+str(user1.atk)+" hp.\n")
-        if (choice2 == "1"):                     # Attack of player 2
+        if choice2 == "1":                     # Attack of player 2
             n.broadcast(conns, user2.name+" attack!")
-            if (choice1 == "3"):                 # Counter-attack of player 1
+            if choice1 == "3":                 # Counter-attack of player 1
                 n.broadcast(conns, "But "+user1.name+" counter-attack!")
                 user2.hp -= user1.catk
                 n.broadcast(conns, user2.name +
@@ -111,7 +113,7 @@ def game(users: List[User]) -> None:
     if ((user1.hp <= 0) and (user2.hp <= 0)):
         n.broadcast(conns, "Both players have no more hp, it's a tie!")
     else:
-        if (user2.hp <= 0):
+        if user2.hp <= 0:
             n.broadcast(conns, user1.name+" won!")
-        if (user1.hp <= 0):
+        if user1.hp <= 0:
             n.broadcast(conns, user2.name+" won!")

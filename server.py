@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # coding:utf-8
 
+'''Server for the game'''
+
+import socket
+import argparse
+import sys
 from lib.game import game
 from lib.network import send_msg, recv_msg
 from lib.user import User
-import socket
-import argparse
 
 argparser: argparse.ArgumentParser = argparse.ArgumentParser()
 argparser.add_argument(
@@ -32,6 +35,8 @@ verbose = args.verbose
 
 
 class Server:
+    """Class that handle the network server for the game"""
+
     def __init__(self) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((host, port))
@@ -99,11 +104,7 @@ if __name__ == "__main__":
         print("\nStopping server...")
         server.stop()
         print("Server stopped")
-        exit(0)
+        sys.exit(0)
     except OSError:
         print("Address already in use")
-        exit(1)
-    except Exception as e:
-        print("Fatal error: ", e)
-        server.stop()
-        exit(1)
+        sys.exit(1)
