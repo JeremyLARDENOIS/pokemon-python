@@ -1,18 +1,16 @@
 '''Module of the game function'''
 
 from socket import socket
-from typing import List
+from typing import List, Tuple
 import lib.network as n
 from lib.user import User
 
 
-def game(users: List[User]) -> None:
+def game(users: Tuple[User, User]) -> None:
     """
-    Game
-    Arguments: users
+    Definition of the game from game module
     """
-    user1 = users[0]
-    user2 = users[1]
+    user1, user2 = users
     conns: List[socket] = [user1.conn, user2.conn]
 
     n.broadcast(

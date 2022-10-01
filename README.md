@@ -73,10 +73,12 @@ mypy server.py client.py
 - Implement tests
 - Implement defense/armor caracteristics
 - Create differents class of player
-- Close socket when server crash except if mode restart always
+- Close socket when `server.py` crash except if mode restart always
 - Verify user entry
 - Make git pre-hooks mypy, pylint and explain how to use it in Readme
-- Make `server.py` continue to listen at the infinite
+- Add Redis database
+- Put `server.py` and `client.py` as a lib
+- If the two players are dead, it's a tie!
 
 ## Bug Reports and Contributions
 

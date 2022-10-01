@@ -6,6 +6,8 @@
 import socket
 import argparse
 import sys
+from typing import Tuple
+
 from lib.game import game
 from lib.network import send_msg, recv_msg
 from lib.user import User
@@ -43,28 +45,27 @@ class Server:
         self.socket.listen(5)
         self.users: list[User] = []
 
-    def listen(self) -> None:
+    def listen(self) -> User:
         """
-        Accept connections from clients and create a new thread for each one
+        Accept one connection from client
         """
-        # while True:
-        if True:
-            conn, addr = self.socket.accept()
-            print(f"Client connected from {addr}")
-            user: User = User("", conn, addr, len(self.users)+1)
-            self.users.append(user)
+        conn, addr = self.socket.accept()
+        print(f"Client connected from {addr}")
+        user: User = User("", conn, addr, len(self.users)+1)
+        self.users.append(user)
 
-            # Useless but necessary
-            # Send id to client and wait for "OK"
-            send_msg(conn, str(user.id))
-            if recv_msg(conn) == "OK":
-                print(f"Client {user.id} connected")
-                # Send "READY" to client
-                send_msg(conn, "READY")
-                # Wait for "READY" from client
-                if recv_msg(conn) == "READY":
-                    pass
-                    # user.start()
+        # Useless but necessary
+        # Send id to client and wait for "OK"
+        send_msg(conn, str(user.id))
+        if recv_msg(conn) == "OK":
+            print(f"Client {user.id} connected")
+            # Send "READY" to client
+            send_msg(conn, "READY")
+            # Wait for "READY" from client
+            if recv_msg(conn) == "READY":
+                pass
+                # user.start()
+        return user
 
     def stop(self) -> None:
         """
@@ -81,11 +82,11 @@ class Server:
         self.users.remove(user)
         user.stop()
 
-    def game(self) -> None:
+    def game(self, users: Tuple[User, User]) -> None:
         """
         Start a game
         """
-        game(self.users)
+        game(users)
 
 
 ##################################MAIN#############################################
@@ -93,13 +94,17 @@ if __name__ == "__main__":
     try:
         server: Server = Server()
         print(f"Server is running on {host}:{port}")
-        server.listen()
-        server.listen()
-        if verbose:
-            print("Sending game...")
-        server.game()
-        server.stop()
-        print("Server is stopped")
+        while True:
+            user1 = server.listen()
+            user2 = server.listen()
+            if verbose:
+                print("Sending game...")
+            ###
+            # Put this part in a thread
+            server.game((user1, user2))
+            user1.stop()
+            user2.stop()
+            ###
     except KeyboardInterrupt:
         print("\nStopping server...")
         server.stop()
