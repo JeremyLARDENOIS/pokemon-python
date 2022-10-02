@@ -13,7 +13,7 @@
 
 ## Simple functionality
 
-You can use `server.py` to create a server and `client.py` to join an existing server.
+You can use `pokepy_server.py` to create a server and `pokepy.py` to join an existing server.
 
 ## With parameters
 
@@ -22,13 +22,13 @@ Default IP is localhost and default port is 3333. You can change this setting on
 Example for server:
 
 ```sh
-./server.py --host 127.0.0.2 --port 1234
+./pokepy_server.py --host 127.0.0.2 --port 1234
 ```
 
 Equivalent example for client:
 
 ```sh
-./client.py --host 127.0.0.2 --port 1234
+./pokepy.py --host 127.0.0.2 --port 1234
 ```
 
 ## What's the purpose?
@@ -47,14 +47,14 @@ docker run -p 3333:3333 -d pokepy
 ## Test of lint (with pylint)
 
 ```sh
-pylint server.py
-pylint client.py
+pylint pokepy_server.py
+pylint pokepy.py
 ```
 
 ## Test of type (with mypy)
 
 ```sh
-mypy server.py client.py
+mypy pokepy_server.py pokepy.py
 ```
 
 ## To Do
@@ -63,7 +63,7 @@ mypy server.py client.py
 - Create a `Tkinter` or web interface
 - Create a system of levelling up
 - Create a system of Player-versus-AI (look dev branch)
-- Make sure that `server.py` doesn't crash if clients crash
+- Make sure that `pokepy_server.py` doesn't crash if clients crash
 - Send a message to one client if the other crashes
 - Create a loop to re-ask for a response if the client's input is invalid, or if they take too long to answer
 - Upgrade network protocol or use another library/framework
@@ -73,11 +73,10 @@ mypy server.py client.py
 - Implement tests
 - Implement defense/armor caracteristics
 - Create differents class of player
-- Close socket when `server.py` crash except if mode restart always
+- Close socket when `pokepy_server.py` crash except if mode restart always
 - Verify user entry
 - Make git pre-hooks mypy, pylint and explain how to use it in Readme
 - Add Redis database
-- Put `server.py` and `client.py` as a lib
 - Seperate skills
 
 ## Bug Reports and Contributions

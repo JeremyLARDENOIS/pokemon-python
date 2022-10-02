@@ -4,42 +4,18 @@
 '''Server for the game'''
 
 import socket
-import argparse
-import sys
 from typing import Tuple
-
 from lib.game import game
-from lib.network import send_msg, recv_msg
+from lib.network import recv_msg, send_msg
 from lib.user import User
-
-argparser: argparse.ArgumentParser = argparse.ArgumentParser()
-argparser.add_argument(
-    '-H',
-    '--host',
-    help='host of the server, default is localhost',
-    default='0.0.0.0')
-argparser.add_argument(
-    '-p',
-    '--port',
-    help='port to listen',
-    type=int,
-    default=3333)
-argparser.add_argument(
-    '-v',
-    '--verbose',
-    help='increase output verbosity',
-    action='store_true')
-args = argparser.parse_args()
-
-host: str = args.host
-port: int = args.port
-verbose = args.verbose
 
 
 class Server:
     '''Class that handle the network server for the game'''
 
-    def __init__(self) -> None:
+    def __init__(self, host: str, port: int) -> None:
+        self.host = host
+        self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((host, port))
         self.socket.listen(5)
@@ -87,29 +63,3 @@ class Server:
         Start a game
         '''
         game(users)
-
-
-##################################MAIN#############################################
-if __name__ == '__main__':
-    try:
-        server: Server = Server()
-        print(f'Server is running on {host}:{port}')
-        while True:
-            user1 = server.listen()
-            user2 = server.listen()
-            if verbose:
-                print('Sending game...')
-            ###
-            # Put this part in a thread
-            server.game((user1, user2))
-            user1.stop()
-            user2.stop()
-            ###
-    except KeyboardInterrupt:
-        print('\nStopping server...')
-        server.stop()
-        print('Server stopped')
-        sys.exit(0)
-    except OSError:
-        print('Address already in use')
-        sys.exit(1)

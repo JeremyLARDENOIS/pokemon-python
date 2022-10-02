@@ -1,9 +1,9 @@
 FROM python:3.9-alpine
 
-COPY server.py .
+COPY pokepy_server.py .
 COPY lib lib
 
-CMD ["python3", "server.py"]
+CMD ["python3", "pokepy_server.py"]
 
 EXPOSE 3333
 
