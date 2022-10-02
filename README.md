@@ -78,7 +78,7 @@ mypy server.py client.py
 - Make git pre-hooks mypy, pylint and explain how to use it in Readme
 - Add Redis database
 - Put `server.py` and `client.py` as a lib
-- If the two players are dead, it's a tie!
+- Seperate skills
 
 ## Bug Reports and Contributions
 
