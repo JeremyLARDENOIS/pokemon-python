@@ -28,3 +28,7 @@ class User:
         '''Stop user'''
         if self.conn:
             self.conn.close()
+
+    def send(self, msg: str) -> None:
+        '''Send a message'''
+        self.conn.sendall(msg.encode('utf-8'))

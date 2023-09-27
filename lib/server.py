@@ -3,10 +3,9 @@
 
 '''Server for the game'''
 
-import socket
 from typing import Tuple
 from lib.game import game
-from lib.network import recv_msg, send_msg
+from lib.network import recv_msg, send_msg, init_socket
 from lib.user import User
 
 
@@ -16,9 +15,7 @@ class Server:
     def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((host, port))
-        self.socket.listen(5)
+        self.socket = init_socket(host, port)
         self.users: list[User] = []
 
     def listen(self) -> User:
@@ -38,9 +35,10 @@ class Server:
             # Send 'READY' to client
             send_msg(conn, 'READY')
             # Wait for 'READY' from client
-            if recv_msg(conn) == 'READY':
-                pass
-                # user.start()
+            if recv_msg(conn) != 'READY':
+                print(f'Client {user.connection_id} not ready')
+                user.stop()
+                return None
         return user
 
     def stop(self) -> None:

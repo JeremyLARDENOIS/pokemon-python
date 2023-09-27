@@ -1,12 +1,21 @@
 '''Module of the networks functions for handle socket'''
 
-from socket import socket
+from socket import socket, AF_INET, SOCK_STREAM
 import sys
 from typing import List, Tuple
 
 # need to be change
 verbose = sys.argv[0].endswith('server.py')
 
+
+def init_socket(host: str, port: int) -> socket:
+    '''
+    Init a socket with host and port
+    '''
+    sock = socket(AF_INET, SOCK_STREAM)
+    sock.bind((host, port))
+    sock.listen(5)
+    return sock
 
 def send_msg(conn: socket, msg: str) -> None:
     '''

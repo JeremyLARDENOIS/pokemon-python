@@ -6,6 +6,7 @@
 import argparse
 import sys
 from lib.server import Server
+from lib.user import User
 
 argparser: argparse.ArgumentParser = argparse.ArgumentParser()
 argparser.add_argument(
@@ -36,9 +37,17 @@ if __name__ == '__main__':
     try:
         server: Server = Server(host, port)
         print(f'Server is running on {host}:{port}')
+        users: list[User] = []
         while True:
-            user1 = server.listen()
-            user2 = server.listen()
+            user = server.listen()
+            if user:
+                users.append(user)
+            if len(users) == 2:
+                user1, user2 = users
+                users = []
+                if verbose:
+                    print('2 users connected')
+
             if verbose:
                 print('Sending game...')
             ###

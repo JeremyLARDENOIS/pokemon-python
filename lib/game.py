@@ -54,13 +54,15 @@ def game(users: Tuple[User, User]) -> None:
         n.broadcast(conns, '3 : Counter-attack')
 
         choice1, choice2 = n.recv2(conns)  # Reception of choices
+        # choice1, choice2 = n.recv_choose(conns, '1', '2', '3')  # Reception of choices
         # Implementation of them
         # Heals are executed before attacks
+        # can be a match case
         if choice1 == '2':                     # Heal of player 1
             n.broadcast(conns, f'{user1.name} heals himself!')
             # We don't want to exceed the basic hp limit
             gain = min(User.hp, user1.hp +
-                       user1.heal) - user1.hp
+                user1.heal) - user1.hp
             user1.hp += gain
             n.broadcast(conns, f'{user1.name} won {gain} hp.\n')
         if choice2 == '2':                     # Heal of player 2

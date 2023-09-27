@@ -64,7 +64,7 @@ mypy pokepy_server.py pokepy.py
 - Create a system of levelling up
 - Create a system of Player-versus-AI (look dev branch)
 - Make sure that `pokepy_server.py` doesn't crash if clients crash
-- Send a message to one client if the other crashes
+- Send a message to one client if the other crash
 - Create a loop to re-ask for a response if the client's input is invalid, or if they take too long to answer
 - Upgrade network protocol or use another library/framework
 - Make a multi-platform server (several combat instances at the same time)
@@ -72,12 +72,16 @@ mypy pokepy_server.py pokepy.py
 - Record the user's network protocol
 - Implement tests
 - Implement defense/armor caracteristics
-- Create differents class of player
+- Create differents class of player RPG based
 - Close socket when `pokepy_server.py` crash except if mode restart always
-- Verify user entry
+- Verify user entry: add "choice" network verb that allow to only choose between some option 
 - Make git pre-hooks mypy, pylint and explain how to use it in Readme
 - Add Redis database
-- Seperate skills
+- Separate skills in a class
+- Separate networks stuff in a module
+- Make a refactor for client and server lib
+- i18n
+- Refactor `lib/server.py` and `lib/client.py`
 
 ## Bug Reports and Contributions
 
